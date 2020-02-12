@@ -1,122 +1,122 @@
 {
   "INFO104": {
-    "Gruppe1": { "dag": "onsdag",
+    "Gruppe1": { "day": "onsdag",
       "Starttid": "12.15",
       "endtid": "14.00"
     },
-    "Gruppe2": { "dag": "fredag",
+    "Gruppe2": { "day": "fredag",
       "Starttid": "12.15",
       "endtid": "14.00"
     },
-    "Gruppe3": { "dag": "tirsdag",
+    "Gruppe3": { "day": "tirsdag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe4": { "dag": "mandag",
+    "Gruppe4": { "day": "mandag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe5": { "dag": "tirsdag",
+    "Gruppe5": { "day": "tirsdag",
       "Starttid": "14.15",
       "endtid": "16.00"
     },
-    "Gruppe6": { "dag": "mandag",
+    "Gruppe6": { "day": "mandag",
       "Starttid": "10.15",
       "endtid": "12.00"
     },
-    "Gruppe7": { "dag": "torsdag",
+    "Gruppe7": { "day": "torsdag",
       "Starttid": "12.15",
       "endtid": "14.00"
     },
-    "forelesning": {"dag": "mandag",
+    "forelesning": {"day": "mandag",
       "Starttid": "14.15",
       "endtid": "16.00"
     }
   },
   "INFO110": {
-    "Gruppe1": { "dag": "tirsdag",
+    "Gruppe1": { "day": "tirsdag",
       "Starttid": "10.15",
       "endtid": "12.00"
     },
-    "Gruppe2": { "dag": "onsdag",
+    "Gruppe2": { "day": "onsdag",
       "Starttid": "12.15",
       "endtid": "14.00"
     },
-    "Gruppe3": { "dag": "mandag",
+    "Gruppe3": { "day": "mandag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe4": { "dag": "mandag",
+    "Gruppe4": { "day": "mandag",
       "Starttid": "10.15",
       "endtid": "12.00"
     },
-    "Gruppe5": { "dag": "tirsdag",
+    "Gruppe5": { "day": "tirsdag",
       "Starttid": "14.15",
       "endtid": "16.00"
     },
-    "Gruppe6": { "dag": "tirsdag",
+    "Gruppe6": { "day": "tirsdag",
       "Starttid": "10.15",
       "endtid": "12.00"
     },
-    "Gruppe7": { "dag": "torsdag",
+    "Gruppe7": { "day": "torsdag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe8": { "dag": "tirsdag",
+    "Gruppe8": { "day": "tirsdag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe9": { "dag": "fredag",
+    "Gruppe9": { "day": "fredag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "forelesning": {"dag": "onsdag",
+    "forelesning": {"day": "onsdag",
       "Starttid": "10.15",
       "endtid": "12.00"
     }
   },
   "INFO135": {
-    "Gruppe1": { "dag": "onsdag",
+    "Gruppe1": { "day": "onsdag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe2": { "dag": "onsdag",
+    "Gruppe2": { "day": "onsdag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe3": { "dag": "onsdag",
+    "Gruppe3": { "day": "onsdag",
       "Starttid": "14.15",
       "endtid": "16.00"
     },
-    "Gruppe4": { "dag": "onsdag",
+    "Gruppe4": { "day": "onsdag",
       "Starttid": "14.15",
       "endtid": "16.00"
     },
-    "Gruppe5": { "dag": "fredag",
+    "Gruppe5": { "day": "fredag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe6": { "dag": "fredag",
+    "Gruppe6": { "day": "fredag",
       "Starttid": "08.15",
       "endtid": "10.00"
     },
-    "Gruppe7": { "dag": "tirsdag",
+    "Gruppe7": { "day": "tirsdag",
       "Starttid": "14.15",
       "endtid": "16.00"
     },
-    "Gruppe8": { "dag": "tirsdag",
+    "Gruppe8": { "day": "tirsdag",
       "Starttid": "14.15",
       "endtid": "16.00"
     },
-    "Gruppe9": { "dag": "fredag",
+    "Gruppe9": { "day": "fredag",
       "Starttid": "12.15",
       "endtid": "14.00"
     },
-    "Gruppe10": { "dag": "fredag",
+    "Gruppe10": { "day": "fredag",
       "Starttid": "12.15",
       "endtid": "14.00"
     },
-    "forelesning": {"dag": "tirsdag",
+    "forelesning": {"day": "tirsdag",
       "Starttid": "12.15",
       "endtid": "14.00"
     }

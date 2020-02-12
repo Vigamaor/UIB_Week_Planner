@@ -1,0 +1,124 @@
+{
+  "INFO104": {
+    "Gruppe1": { "day": "wed",
+      "Starttid": "12.15",
+      "endtid": "14.00"
+    },
+    "Gruppe2": { "day": "fri",
+      "Starttid": "12.15",
+      "endtid": "14.00"
+    },
+    "Gruppe3": { "day": "tue",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe4": { "day": "mon",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe5": { "day": "tue",
+      "Starttid": "14.15",
+      "endtid": "16.00"
+    },
+    "Gruppe6": { "day": "mon",
+      "Starttid": "10.15",
+      "endtid": "12.00"
+    },
+    "Gruppe7": { "day": "thu",
+      "Starttid": "12.15",
+      "endtid": "14.00"
+    },
+    "Forelesning": {"day": "mon",
+      "Starttid": "14.15",
+      "endtid": "16.00"
+    }
+  },
+  "INFO110": {
+    "Gruppe1": { "day": "tue",
+      "Starttid": "10.15",
+      "endtid": "12.00"
+    },
+    "Gruppe2": { "day": "wed",
+      "Starttid": "12.15",
+      "endtid": "14.00"
+    },
+    "Gruppe3": { "day": "mon",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe4": { "day": "mon",
+      "Starttid": "10.15",
+      "endtid": "12.00"
+    },
+    "Gruppe5": { "day": "tue",
+      "Starttid": "14.15",
+      "endtid": "16.00"
+    },
+    "Gruppe6": { "day": "tue",
+      "Starttid": "10.15",
+      "endtid": "12.00"
+    },
+    "Gruppe7": { "day": "thu",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe8": { "day": "tue",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe9": { "day": "fri",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Forelesning": {"day": "wed",
+      "Starttid": "10.15",
+      "endtid": "12.00"
+    }
+  },
+  "INFO135": {
+    "Gruppe1": { "day": "wed",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe2": { "day": "wed",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe3": { "day": "wed",
+      "Starttid": "14.15",
+      "endtid": "16.00"
+    },
+    "Gruppe4": { "day": "wed",
+      "Starttid": "14.15",
+      "endtid": "16.00"
+    },
+    "Gruppe5": { "day": "fri",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe6": { "day": "fri",
+      "Starttid": "08.15",
+      "endtid": "10.00"
+    },
+    "Gruppe7": { "day": "tue",
+      "Starttid": "14.15",
+      "endtid": "16.00"
+    },
+    "Gruppe8": { "day": "tue",
+      "Starttid": "14.15",
+      "endtid": "16.00"
+    },
+    "Gruppe9": { "day": "fri",
+      "Starttid": "12.15",
+      "endtid": "14.00"
+    },
+    "Gruppe10": { "day": "fri",
+      "Starttid": "12.15",
+      "endtid": "14.00"
+    },
+    "Forelesning": {"day": "tue",
+      "Starttid": "12.15",
+      "endtid": "14.00"
+    }
+  }
+}

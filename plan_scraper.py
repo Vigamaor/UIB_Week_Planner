@@ -4,9 +4,14 @@ from selenium.webdriver.firefox.options import Options
 import json
 from sys import platform
 
+
 class Week:
     def __init__(self, week_number):
         self.week_number = int(week_number)
+        self.groups = []
+
+    def add_group(self,name, day, start_time, end_time):
+        self.groups.append(Group(name, day, start_time, end_time))
 
     def __repr__(self):
         return f"Week {self.week_number}"
@@ -29,10 +34,12 @@ def extract_data():
     url = f"https://tp.uio.no/uib/timeplan/timeplan.php?id={subject_code}&type=course&sem=20v&lang=en"
     options = Options()
     options.add_argument("-headless")
-    if platform == "Win32":
+    if platform == "win32":
         driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
     elif platform == "linux" or platform == "linux2":
         driver = webdriver.Firefox(executable_path="dep/geckodriver", options=options)
+    else:
+        assert False, f"Expected platform win32, linux or linux2 not {platform}"
     driver.get(url)
     time.sleep(2)
     results = driver.find_elements_by_class_name("cal_table")
@@ -42,13 +49,14 @@ def extract_data():
         text = result.text.split('\n')
         assert text[0].split()[0] == "Calendar", f"Language seems to be wrong expected calendar not {text[0].split()[0]}"
         week = Week(text[0].split()[2])
+        plan.append(week)
         for string in text:
             if any(day in string for day in ["mon", "tue", "wed", "thu", "fri"]):
                 string = string.split()
                 if string[-1] == "Forelesning":
-                    plan.append(Group(string[-1], string[0], string[2].replace(":", "."),string[4].replace(":", ".")))
+                    week.add_group(string[-1], string[0], string[2].replace(":", "."),string[4].replace(":", "."))
                 else:
-                    plan.append(Group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", ".")))
+                    week.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
     driver.quit()
     return plan
 
@@ -63,4 +71,5 @@ def clean_data():
     # TODO clean data and check for consistency between the weeks
 
 
-extract_data()
+data = extract_data()
+print("hello")
