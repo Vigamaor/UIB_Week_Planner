@@ -2,7 +2,7 @@ from selenium import webdriver
 import time
 from selenium.webdriver.firefox.options import Options
 import json
-
+from sys import platform
 
 class Week:
     def __init__(self, week_number):
@@ -29,7 +29,10 @@ def extract_data():
     url = f"https://tp.uio.no/uib/timeplan/timeplan.php?id={subject_code}&type=course&sem=20v&lang=en"
     options = Options()
     options.add_argument("-headless")
-    driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
+    if platform == "Win32":
+        driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
+    elif platform == "linux" or platform == "linux2":
+        driver = webdriver.Firefox(executable_path="dep/geckodriver", options=options)
     driver.get(url)
     time.sleep(2)
     results = driver.find_elements_by_class_name("cal_table")
