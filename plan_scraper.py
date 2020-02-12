@@ -4,15 +4,12 @@ from selenium.webdriver.firefox.options import Options
 import json
 
 
-# import pandas as pd
-
-
 class Week:
-    def __init__(self, weeknumber):
-        self.weeknumber = int(weeknumber)
+    def __init__(self, week_number):
+        self.week_number = int(week_number)
 
     def __repr__(self):
-        return f"Week {self.weeknumber}"
+        return f"Week {self.week_number}"
 
 
 class Group:
@@ -61,5 +58,6 @@ def write_to_file():
 def clean_data():
     pass
     # TODO clean data and check for consistency between the weeks
+
 
 extract_data()
