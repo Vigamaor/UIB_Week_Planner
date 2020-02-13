@@ -5,25 +5,26 @@ import json
 from sys import platform
 
 
-class Week:
-    def __init__(self, week_number):
-        self.week_number = int(week_number)
+class Subject:
+    def __init__(self, subject_code):
+        self.subject_code = subject_code
         self.groups = []
 
-    def add_group(self,name, day, start_time, end_time):
-        self.groups.append(Group(name, day, start_time, end_time))
+    def add_group(self, name, day, start_time, end_time, week_number):
+        self.groups.append(Group(name, day, start_time, end_time, week_number))
 
     def __repr__(self):
-        return f"Week {self.week_number}"
+        return self.subject_code
 
 
 class Group:
-    def __init__(self, name, day, start_time, end_time):
+    def __init__(self, name, day, start_time, end_time, week_number):
         self.name = name
         self.day = day
         self.start_time = float(start_time)
         self.end_time = float(end_time)
         self.lecture = name == "Forelesning"
+        self.week_number = week_number
 
     def __repr__(self):
         return self.name
@@ -44,21 +45,19 @@ def extract_data():
     time.sleep(2)
     results = driver.find_elements_by_class_name("cal_table")
     assert len(results) > 0, f"Found no tables. maybe the subject code is wrong. Subject code given {subject_code}"
-    plan = []
+    subject = Subject(subject_code)
     for result in results:
         text = result.text.split('\n')
         assert text[0].split()[0] == "Calendar", f"Language seems to be wrong expected calendar not {text[0].split()[0]}"
-        week = Week(text[0].split()[2])
-        plan.append(week)
         for string in text:
             if any(day in string for day in ["mon", "tue", "wed", "thu", "fri"]):
                 string = string.split()
                 if string[-1] == "Forelesning":
-                    week.add_group(string[-1], string[0], string[2].replace(":", "."),string[4].replace(":", "."))
+                    subject.add_group(string[-1], string[0], string[2].replace(":", "."),string[4].replace(":", "."), text[0].split()[2])
                 else:
-                    week.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
+                    subject.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."), text[0].split()[2])
     driver.quit()
-    return plan
+    return subject
 
 
 def write_to_file():
@@ -66,10 +65,25 @@ def write_to_file():
     # TODO write data to file
 
 
-def clean_data():
-    pass
-    # TODO clean data and check for consistency between the weeks
+def clean_data(subject):
+    week_plan = {}
+    for group in subject.groups:
+        if group.week_number in week_plan:
+            week_plan[group.week_number].append(group)
+        else:
+            week_plan[group.week_number] = []
+            week_plan[group.week_number].append(group)
+    print(week_plan)
+    number_of_groups = set()
+    for lis in week_plan.values():
+        number_of_groups.add(len(lis))
+    print(number_of_groups)
+    # TODO check if there how many different weeks there are.
+
+
+
 
 
 data = extract_data()
+clean_data(data)
 print("hello")
