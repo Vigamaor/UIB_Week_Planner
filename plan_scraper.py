@@ -78,12 +78,18 @@ def clean_data(subject):
     for lis in week_plan.values():
         number_of_groups.add(len(lis))
     print(number_of_groups)
+    if len(number_of_groups) <3 and min(number_of_groups) <= 2:
+        pass
+        # TODO How are we going to create the standard week.
+    elif len(number_of_groups) >=3:
+        # There are to many weeks who are different and all weeks will be retained and tested later
+        return subject
+
     # TODO check if there how many different weeks there are.
 
 
-
-
-
-data = extract_data()
-clean_data(data)
-print("hello")
+if __name__ == '__main__':
+    # Test data
+    data = extract_data()
+    clean_data(data)
+    print("hello")
