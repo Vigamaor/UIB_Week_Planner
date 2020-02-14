@@ -8,23 +8,22 @@ from sys import platform
 class Subject:
     def __init__(self, subject_code):
         self.subject_code = subject_code
-        self.groups = []
+        self.weeks = {}
 
     def add_group(self, name, day, start_time, end_time, week_number):
-        self.groups.append(Group(name, day, start_time, end_time, week_number))
+        self.weeks[week_number].append(Group(name, day, start_time, end_time))
 
     def __repr__(self):
         return self.subject_code
 
 
 class Group:
-    def __init__(self, name, day, start_time, end_time, week_number):
+    def __init__(self, name, day, start_time, end_time):
         self.name = name
         self.day = day
         self.start_time = float(start_time)
         self.end_time = float(end_time)
         self.lecture = name == "Forelesning"
-        self.week_number = week_number
 
     def __repr__(self):
         return self.name
@@ -48,6 +47,8 @@ def extract_data():
     subject = Subject(subject_code)
     for result in results:
         text = result.text.split('\n')
+        if text[0].split()[2] not in subject.weeks:
+            subject.weeks[text[0].split()[2]] = []
         assert text[0].split()[0] == "Calendar", f"Language seems to be wrong expected calendar not {text[0].split()[0]}"
         for string in text:
             if any(day in string for day in ["mon", "tue", "wed", "thu", "fri"]):
@@ -60,36 +61,23 @@ def extract_data():
     return subject
 
 
-def write_to_file():
-    pass
+def write_to_file(subject):
+    data = {subject.subject_code: {"weeks": {}}}
+    with open('plans.json', "w", encoding='utf-8') as file:
+        for week_number, subjects in subject.weeks.items():
+            data[subject.subject_code]["weeks"][week_number] = {}
+            for group in subjects:
+                data[subject.subject_code]["weeks"][week_number][group.name] = {"day": group.day, "start_time": group.start_time, "end_time": group.end_time, "lecture": group.lecture}
+        json.dump(data, file, indent=4)
+
+    print(data)
+
     # TODO write data to file
 
-
-def clean_data(subject):
-    week_plan = {}
-    for group in subject.groups:
-        if group.week_number in week_plan:
-            week_plan[group.week_number].append(group)
-        else:
-            week_plan[group.week_number] = []
-            week_plan[group.week_number].append(group)
-    print(week_plan)
-    number_of_groups = set()
-    for lis in week_plan.values():
-        number_of_groups.add(len(lis))
-    print(number_of_groups)
-    if len(number_of_groups) <3 and min(number_of_groups) <= 2:
-        pass
-        # TODO How are we going to create the standard week.
-    elif len(number_of_groups) >=3:
-        # There are to many weeks who are different and all weeks will be retained and tested later
-        return subject
-
-    # TODO check if there how many different weeks there are.
 
 
 if __name__ == '__main__':
     # Test data
     data = extract_data()
-    clean_data(data)
+    write_to_file(data)
     print("hello")
