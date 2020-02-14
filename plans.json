@@ -1,0 +1,554 @@
+{
+    "INFO135": {
+        "week_number": {
+            "4": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "5": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "6": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                },
+                "Seminar 7": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 8": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 1": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 2": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 3": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 4": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 5": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 6": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 9": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                },
+                "Seminar 10": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                }
+            },
+            "7": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "8": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                },
+                "Seminar 7": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 8": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 1": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 2": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 3": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 4": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 5": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 6": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 9": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                },
+                "Seminar 10": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                }
+            },
+            "9": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "10": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                },
+                "Seminar 7": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 8": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 1": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 2": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 3": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 4": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 5": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 6": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 9": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                },
+                "Seminar 10": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                }
+            },
+            "11": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "12": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                },
+                "Seminar 7": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 8": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 1": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 2": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 3": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 4": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 5": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 6": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 9": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                },
+                "Seminar 10": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                }
+            },
+            "13": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "14": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                },
+                "Seminar 7": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 8": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 1": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 2": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 3": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 4": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 5": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 6": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 9": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                },
+                "Seminar 10": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                }
+            },
+            "16": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "17": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                },
+                "Seminar 7": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 8": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 1": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 2": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 3": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 4": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 5": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 6": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 9": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                },
+                "Seminar 10": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                }
+            },
+            "18": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            },
+            "19": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                },
+                "Seminar 7": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 8": {
+                    "day": "tue",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 1": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 2": {
+                    "day": "wed",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 3": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 4": {
+                    "day": "wed",
+                    "start_time": 14.15,
+                    "end_time": 16.0,
+                    "lecture": false
+                },
+                "Seminar 5": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 6": {
+                    "day": "fri",
+                    "start_time": 8.15,
+                    "end_time": 10.0,
+                    "lecture": false
+                },
+                "Seminar 9": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                },
+                "Seminar 10": {
+                    "day": "fri",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": false
+                }
+            },
+            "20": {
+                "Forelesning": {
+                    "day": "tue",
+                    "start_time": 12.15,
+                    "end_time": 14.0,
+                    "lecture": true
+                }
+            }
+        }
+    }
+}
