@@ -1,52 +1,29 @@
 import json
+from plan_scraper import Subject, Group
 
 
-class Group:
-    def __init__(self, name, day, start_time, end_time, subject):
-        self.name = name
-        self.day = day
-        self.start_time = float(start_time)
-        self.end_time = float(end_time)
-        self.lecture = name == "Forelesning"
-        self.subject = subject
-
-    def __repr__(self):
-        return self.name
-
+def delete_subject(subject_code):
+    pass
 
 def get_data():
-    with open("tider.json", "r", encoding='utf-8') as file:
+    with open("plans.json", "r", encoding='utf-8') as file:
         data = json.load(file)
+    subjects = []
+    for subject, weeks in data.items():
+        subjects.append(Subject(subject))
+        for week, groups in weeks.items():
+            for group_name, group_info in groups.items():
+                subjects[-1].add_group(group_name, group_info["day"],group_info["start_time"],group_info["end_time"], week)
 
-    global info104
-    global info110
-    global info135
-    global lectures
-
-    for gruppe_data in data["INFO104"].items():
-        objekt = Group(gruppe_data[0], gruppe_data[1]["day"], gruppe_data[1]["Starttid"], gruppe_data[1]["endtid"],
-                       "info104")
-        if objekt.lecture:
-            lectures.append(objekt)
-        else:
-            info104.append(objekt)
-    for gruppe_data in data["INFO110"].items():
-        objekt = Group(gruppe_data[0], gruppe_data[1]["day"], gruppe_data[1]["Starttid"], gruppe_data[1]["endtid"],
-                       "info110")
-        if objekt.lecture:
-            lectures.append(objekt)
-        else:
-            info110.append(objekt)
-    for gruppe_data in data["INFO135"].items():
-        objekt = Group(gruppe_data[0], gruppe_data[1]["day"], gruppe_data[1]["Starttid"], gruppe_data[1]["endtid"],
-                       "info135")
-        if objekt.lecture:
-            lectures.append(objekt)
-        else:
-            info135.append(objekt)
+    print(data)
 
 
-def sort():
+
+
+
+
+
+'''LEGACY def sort():
     list_of_subjects = []
     for subject in info104:
         for subject2 in info110:
@@ -82,13 +59,8 @@ def sort():
                         list_of_subjects.append([subject, subject2, subject3])
 
     return list_of_subjects
+'''
 
 
-info104 = []
-info110 = []
-info135 = []
-lectures = []
-
-get_data()
-list_of_subjects = sort()
-print("hei")
+if __name__ == '__main__':
+    get_data()

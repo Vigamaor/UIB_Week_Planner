@@ -11,7 +11,11 @@ class Subject:
         self.weeks = {}
 
     def add_group(self, name, day, start_time, end_time, week_number):
-        self.weeks[week_number].append(Group(name, day, start_time, end_time))
+        try:
+            self.weeks[int(week_number)].append(Group(name, day, start_time, end_time))
+        except KeyError:
+            self.weeks[int(week_number)] = []
+            self.weeks[int(week_number)].append(Group(name, day, start_time, end_time))
 
     def __repr__(self):
         return self.subject_code
@@ -34,6 +38,7 @@ def extract_data():
     url = f"https://tp.uio.no/uib/timeplan/timeplan.php?id={subject_code}&type=course&sem=20v&lang=en"
     options = Options()
     options.add_argument("-headless")
+    print("Gathering the data from the tp.uio.no website. This might take a minute.")
     if platform == "win32":
         driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
     elif platform == "linux" or platform == "linux2":
@@ -54,30 +59,32 @@ def extract_data():
             if any(day in string for day in ["mon", "tue", "wed", "thu", "fri"]):
                 string = string.split()
                 if string[-1] == "Forelesning":
-                    subject.add_group(string[-1], string[0], string[2].replace(":", "."),string[4].replace(":", "."), text[0].split()[2])
+                    subject.add_group(string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
                 else:
-                    subject.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."), text[0].split()[2])
+                    subject.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
     driver.quit()
+    print("All done gathering data")
     return subject
 
 
 def write_to_file(subject):
-    data = {subject.subject_code: {"weeks": {}}}
+    try:
+        with open('plans.json', encoding='utf-8') as file:
+            data = json.load(file)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        data = {}
+    data[subject.subject_code] = {}
     with open('plans.json', "w", encoding='utf-8') as file:
         for week_number, subjects in subject.weeks.items():
-            data[subject.subject_code]["weeks"][week_number] = {}
+            data[subject.subject_code][week_number] = {}
             for group in subjects:
-                data[subject.subject_code]["weeks"][week_number][group.name] = {"day": group.day, "start_time": group.start_time, "end_time": group.end_time, "lecture": group.lecture}
+                data[subject.subject_code][week_number][group.name] = {"day": group.day, "start_time": group.start_time, "end_time": group.end_time, "lecture": group.lecture}
         json.dump(data, file, indent=4)
 
     print(data)
-
-    # TODO write data to file
-
 
 
 if __name__ == '__main__':
     # Test data
     data = extract_data()
     write_to_file(data)
-    print("hello")
