@@ -5,6 +5,7 @@ import json
 from sys import platform
 
 
+
 class Subject:
     def __init__(self, subject_code):
         self.subject_code = subject_code
@@ -19,6 +20,7 @@ class Subject:
 
     def __repr__(self):
         return self.subject_code
+
 
 
 class Group:
@@ -84,7 +86,9 @@ def write_to_file(subject):
     print(data)
 
 
+
 if __name__ == '__main__':
     # Test data
     data = extract_data()
     write_to_file(data)
+
