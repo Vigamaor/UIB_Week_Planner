@@ -2,14 +2,25 @@ from selenium import webdriver
 import time
 from selenium.webdriver.firefox.options import Options
 import json
+from sys import platform
 
 
-class Week:
-    def __init__(self, week_number):
-        self.week_number = int(week_number)
+
+class Subject:
+    def __init__(self, subject_code):
+        self.subject_code = subject_code
+        self.weeks = {}
+
+    def add_group(self, name, day, start_time, end_time, week_number):
+        try:
+            self.weeks[int(week_number)].append(Group(name, day, start_time, end_time))
+        except KeyError:
+            self.weeks[int(week_number)] = []
+            self.weeks[int(week_number)].append(Group(name, day, start_time, end_time))
 
     def __repr__(self):
-        return f"Week {self.week_number}"
+        return self.subject_code
+
 
 
 class Group:
@@ -29,35 +40,55 @@ def extract_data():
     url = f"https://tp.uio.no/uib/timeplan/timeplan.php?id={subject_code}&type=course&sem=20v&lang=en"
     options = Options()
     options.add_argument("-headless")
-    driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
+    print("Gathering the data from the tp.uio.no website. This might take a minute.")
+    if platform == "win32":
+        driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
+    elif platform == "linux" or platform == "linux2":
+        driver = webdriver.Firefox(executable_path="dep/geckodriver", options=options)
+    else:
+        assert False, f"Expected platform win32, linux or linux2 not {platform}"
     driver.get(url)
     time.sleep(2)
     results = driver.find_elements_by_class_name("cal_table")
     assert len(results) > 0, f"Found no tables. maybe the subject code is wrong. Subject code given {subject_code}"
-    plan = []
+    subject = Subject(subject_code)
     for result in results:
         text = result.text.split('\n')
+        if text[0].split()[2] not in subject.weeks:
+            subject.weeks[text[0].split()[2]] = []
         assert text[0].split()[0] == "Calendar", f"Language seems to be wrong expected calendar not {text[0].split()[0]}"
-        week = Week(text[0].split()[2])
         for string in text:
             if any(day in string for day in ["mon", "tue", "wed", "thu", "fri"]):
                 string = string.split()
                 if string[-1] == "Forelesning":
-                    plan.append(Group(string[-1], string[0], string[2].replace(":", "."),string[4].replace(":", ".")))
+                    subject.add_group(string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
                 else:
-                    plan.append(Group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", ".")))
+                    subject.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
     driver.quit()
-    return plan
+    print("All done gathering data")
+    return subject
 
 
-def write_to_file():
-    pass
-    # TODO write data to file
+def write_to_file(subject):
+    try:
+        with open('plans.json', encoding='utf-8') as file:
+            data = json.load(file)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        data = {}
+    data[subject.subject_code] = {}
+    with open('plans.json', "w", encoding='utf-8') as file:
+        for week_number, subjects in subject.weeks.items():
+            data[subject.subject_code][week_number] = {}
+            for group in subjects:
+                data[subject.subject_code][week_number][group.name] = {"day": group.day, "start_time": group.start_time, "end_time": group.end_time, "lecture": group.lecture}
+        json.dump(data, file, indent=4)
+
+    print(data)
 
 
-def clean_data():
-    pass
-    # TODO clean data and check for consistency between the weeks
 
+if __name__ == '__main__':
+    # Test data
+    data = extract_data()
+    write_to_file(data)
 
-extract_data()

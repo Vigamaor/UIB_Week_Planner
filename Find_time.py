@@ -1,82 +1,66 @@
 import json
+from plan_scraper import Subject, Group
 
 
-class Gruppe:
-    def __init__(self, navn, dag, start_tid, stopp_tid, fag):
-        self.navn = navn
-        self.dag = dag
-        self.start_tid = float(start_tid)
-        self.stopp_tid = float(stopp_tid)
-        self.forelesning = navn == "forelesning"
-        self.fag = fag
+def delete_subject(subject_code):
+    pass
 
-    def __repr__(self):
-        return self.navn
-
-
-def hent_data():
-    with open("tider.json", "r", encoding='utf-8') as file:
+def get_data():
+    with open("plans.json", "r", encoding='utf-8') as file:
         data = json.load(file)
+    subjects = []
+    for subject, weeks in data.items():
+        subjects.append(Subject(subject))
+        for week, groups in weeks.items():
+            for group_name, group_info in groups.items():
+                subjects[-1].add_group(group_name, group_info["day"],group_info["start_time"],group_info["end_time"], week)
 
-    global info104
-    global info110
-    global info135
-    global forelesninger
-
-    for gruppe_data in data["INFO104"].items():
-        objekt = Gruppe(gruppe_data[0], gruppe_data[1]["dag"], gruppe_data[1]["Starttid"], gruppe_data[1]["endtid"], "info104")
-        if objekt.forelesning:
-            forelesninger.append(objekt)
-        else:
-            info104.append(objekt)
-    for gruppe_data in data["INFO110"].items():
-        objekt = Gruppe(gruppe_data[0], gruppe_data[1]["dag"], gruppe_data[1]["Starttid"], gruppe_data[1]["endtid"], "info110")
-        if objekt.forelesning:
-            forelesninger.append(objekt)
-        else:
-            info110.append(objekt)
-    for gruppe_data in data["INFO135"].items():
-        objekt = Gruppe(gruppe_data[0], gruppe_data[1]["dag"], gruppe_data[1]["Starttid"], gruppe_data[1]["endtid"], "info135")
-        if objekt.forelesning:
-            forelesninger.append(objekt)
-        else:
-            info135.append(objekt)
+    print(data)
 
 
-def sorter():
-    liste_tider = []
-    for fag in info104:
-        for fag2 in info110:
-            for fag3 in info135:
-                if not (fag.dag == "torsdag" or fag2.dag == "torsdag" or fag3.dag == "torsdag" or fag.dag == "fredag" or fag2.dag == "fredag" or fag3.dag =="fredag" or fag.dag == "mandag" or fag2.dag == "mandag" or fag3.dag == "mandag"):
-                    if fag.dag == "onsdag" or fag2.dag == "onsdag" or fag3.dag == "onsdag":
-                        for forelesning in forelesninger:
-                            if fag.dag == forelesning.dag or fag2.dag == forelesning.dag or fag3.dag == forelesning.dag:
-                                if (fag.start_tid == forelesning.start_tid or (forelesning.start_tid < fag.stopp_tid and forelesning.stopp_tid > fag.start_tid)) or (forelesning.start_tid == fag2.start_tid or (fag2.start_tid < forelesning.stopp_tid and fag2.stopp_tid > forelesning.start_tid)) or (forelesning.start_tid == fag3.start_tid or (fag3.start_tid < forelesning.stopp_tid and fag3.stopp_tid > forelesning.start_tid)):
-                                    #TODO her skjærer det seg
+
+
+
+
+
+'''LEGACY def sort():
+    list_of_subjects = []
+    for subject in info104:
+        for subject2 in info110:
+            for subject3 in info135:
+                if not (
+                        subject.day == "thu" or subject2.day == "thu" or subject3.day == "thu" or subject.day == "fri" or subject2.day == "fri" or subject3.day == "fri" or subject.day == "mon" or subject2.day == "mon" or subject3.day == "mon"):
+                    if subject.day == "wed" or subject2.day == "wed" or subject3.day == "wed":
+                        for lecture in lectures:
+                            if subject.day == lecture.day or subject2.day == lecture.day or subject3.day == lecture.day:
+                                if (subject.start_time == lecture.start_time or (
+                                        lecture.start_time < subject.end_time and lecture.end_time > subject.start_time)) or (
+                                        lecture.start_time == subject2.start_time or (
+                                        subject2.start_time < lecture.end_time and subject2.end_time > lecture.start_time)) or (
+                                        lecture.start_time == subject3.start_time or (
+                                        subject3.start_time < lecture.end_time and subject3.end_time > lecture.start_time)):
+                                    # TODO her skjærer det seg
                                     continue
-                        if fag.dag == fag2.dag:
-                            if fag.start_tid == fag2.start_tid or (fag2.start_tid < fag.stopp_tid and fag2.stopp_tid > fag.start_tid):
+                        if subject.day == subject2.day:
+                            if subject.start_time == subject2.start_time or (
+                                    subject2.start_time < subject.end_time and subject2.end_time > subject.start_time):
                                 # TODO her skjærer det seg
                                 continue
-                        if fag.dag == fag3.dag:
-                            if fag.start_tid == fag3.start_tid or (fag3.start_tid < fag.stopp_tid and fag3.stopp_tid > fag.start_tid):
+                        if subject.day == subject3.day:
+                            if subject.start_time == subject3.start_time or (
+                                    subject3.start_time < subject.end_time and subject3.end_time > subject.start_time):
                                 # TODO her skjærer det seg
                                 continue
-                        if fag2.dag == fag3.dag:
-                            if fag2.start_tid == fag3.start_tid or (fag3.start_tid < fag2.stopp_tid and fag3.stopp_tid > fag2.start_tid):
+                        if subject2.day == subject3.day:
+                            if subject2.start_time == subject3.start_time or (
+                                    subject3.start_time < subject2.end_time and subject3.end_time > subject2.start_time):
                                 # TODO her skjærer det seg
                                 continue
-                        liste_tider.append([fag, fag2, fag3])
+                        list_of_subjects.append([subject, subject2, subject3])
 
-    return liste_tider
+    return list_of_subjects
+'''
 
 
-info104 = []
-info110 = []
-info135 = []
-forelesninger = []
-
-#hent_data()
-#liste_tider = sorter()
-#print("hei")
+if __name__ == '__main__':
+    get_data()
