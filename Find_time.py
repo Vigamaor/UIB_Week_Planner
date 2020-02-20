@@ -1,9 +1,18 @@
 import json
-from plan_scraper import Subject, Group
+from plan_scraper import Subject, Group, write_to_file
 
 
-def delete_subject(subject_code):
-    pass
+def delete_subject(subject_code, data):
+    for idx, item in enumerate(data):
+        if item.subject_code == subject_code.upper():
+            data.pop(idx)
+    write_to_file(data)
+            return data
+
+
+    print(f"We could not find the subject {subject_code} in you list of subjects.")
+
+
 
 def get_data():
     with open("plans.json", "r", encoding='utf-8') as file:
@@ -16,12 +25,7 @@ def get_data():
                 subjects[-1].add_group(group_name, group_info["day"],group_info["start_time"],group_info["end_time"], week)
 
     print(data)
-
-
-
-
-
-
+    return subjects
 
 '''LEGACY def sort():
     list_of_subjects = []
@@ -63,4 +67,5 @@ def get_data():
 
 
 if __name__ == '__main__':
-    get_data()
+    data = get_data()
+    data = delete_subject("info132", data)

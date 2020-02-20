@@ -22,7 +22,6 @@ class Subject:
         return self.subject_code
 
 
-
 class Group:
     def __init__(self, name, day, start_time, end_time):
         self.name = name
@@ -54,34 +53,34 @@ def extract_data():
     subject = Subject(subject_code)
     for result in results:
         text = result.text.split('\n')
-        if text[0].split()[2] not in subject.weeks:
-            subject.weeks[text[0].split()[2]] = []
         assert text[0].split()[0] == "Calendar", f"Language seems to be wrong expected calendar not {text[0].split()[0]}"
         for string in text:
             if any(day in string for day in ["mon", "tue", "wed", "thu", "fri"]):
                 string = string.split()
                 if string[-1] == "Forelesning":
-                    subject.add_group(string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
+                    subject.add_group(string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."),text[0].split()[2])
                 else:
-                    subject.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."))
+                    subject.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."),text[0].split()[2])
     driver.quit()
     print("All done gathering data")
     return subject
 
 
-def write_to_file(subject):
-    try:
-        with open('plans.json', encoding='utf-8') as file:
-            data = json.load(file)
-    except (FileNotFoundError, json.decoder.JSONDecodeError):
-        data = {}
-    data[subject.subject_code] = {}
-    with open('plans.json', "w", encoding='utf-8') as file:
-        for week_number, subjects in subject.weeks.items():
-            data[subject.subject_code][week_number] = {}
-            for group in subjects:
-                data[subject.subject_code][week_number][group.name] = {"day": group.day, "start_time": group.start_time, "end_time": group.end_time, "lecture": group.lecture}
-        json.dump(data, file, indent=4)
+def write_to_file(subject, data=None):
+    if data is not None:
+        try:
+            with open('plans.json', encoding='utf-8') as file:
+                data = json.load(file)
+        except (FileNotFoundError, json.decoder.JSONDecodeError):
+            data = {}
+    else:
+        data[subject.subject_code] = {}
+        with open('plans.json', "w", encoding='utf-8') as file:
+            for week_number, subjects in subject.weeks.items():
+                data[subject.subject_code][week_number] = {}
+                for group in subjects:
+                    data[subject.subject_code][week_number][group.name] = {"day": group.day, "start_time": group.start_time, "end_time": group.end_time, "lecture": group.lecture}
+            json.dump(data, file, indent=4)
 
     print(data)
 
