@@ -2,15 +2,18 @@ import json
 from plan_scraper import Subject, Group, write_to_file
 
 
-def delete_subject(subject_code, data):
-    for idx, item in enumerate(data):
+def delete_subject(subject_code, subjects):
+    found = False
+    for idx, item in enumerate(subjects):
         if item.subject_code == subject_code.upper():
-            data.pop(idx)
-    write_to_file(data)
-            return data
+            subjects.pop(idx)
+            found = True
+    write_to_file(subjects=subjects, delete=True)
 
+    if not found:
+        print(f"We could not find the subject {subject_code} in you list of subjects.")
 
-    print(f"We could not find the subject {subject_code} in you list of subjects.")
+    return subjects
 
 
 
@@ -67,5 +70,5 @@ def get_data():
 
 
 if __name__ == '__main__':
-    data = get_data()
-    data = delete_subject("info132", data)
+    subjects = get_data()
+    subjects = delete_subject("info132", subjects)

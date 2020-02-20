@@ -13,6 +13,17 @@ answer = input("Do you want to continue [y/n]: ")
 if answer.lower() != "y":
     exit()
 
+while True:
+    if "Week_planner.py" not in os.listdir():
+        new_dir = input("We cant find the Week_planner python script please provide the folder which Week_planner resides in [please input q to quit]")
+        if new_dir == "q":
+            exit()
+        os.chdir(new_dir)
+
+    else:
+        break
+
+
 try:
     import wget
 except ImportError:
@@ -23,17 +34,6 @@ try:
 except ImportError:
     subprocess.check_call([executable, "-m", "pip", "install", "selenium"])
 
-
-
-while True:
-    if "Week_planner.py" not in os.listdir():
-        new_dir = input("We cant find the Week_planner python script please provide the folder which Week_planner resides in [please input q to quit]")
-        if new_dir == "q":
-            exit()
-        os.chdir(new_dir)
-
-    else:
-        break
 
 if "dep" not in os.listdir():
     os.mkdir("dep")
