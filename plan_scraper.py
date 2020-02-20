@@ -5,7 +5,6 @@ import json
 from sys import platform
 
 
-
 class Subject:
     def __init__(self, subject_code):
         self.subject_code = subject_code
@@ -21,7 +20,7 @@ class Subject:
     def __repr__(self):
         return self.subject_code
 
-
+# TODO change Group class to reflect a group being a single object with multiple happenings instead of a group for every happening
 class Group:
     def __init__(self, name, day, start_time, end_time):
         self.name = name
@@ -30,6 +29,7 @@ class Group:
         self.end_time = float(end_time)
         self.lecture = name == "Forelesning"
 
+
     def __repr__(self):
         return self.name
 
@@ -37,21 +37,27 @@ class Group:
 def extract_data():
     gather =  True
     subjects = []
+
     options = Options()
     options.add_argument("-headless")
+
     print("Starting up the Geckodriver. This might take a minute.")
+
     if platform == "win32":
         driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
     elif platform == "linux" or platform == "linux2":
         driver = webdriver.Firefox(executable_path="dep/geckodriver", options=options)
     else:
         assert False, f"Expected platform win32, linux or linux2 not {platform}"
+
     while gather:
         subject_code = input("What subject would you like to fetch: ").upper()
         url = f"https://tp.uio.no/uib/timeplan/timeplan.php?id={subject_code}&type=course&sem=20v&lang=en"
+
         driver.get(url)
         time.sleep(2)
         results = driver.find_elements_by_class_name("cal_table")
+
         if len(results) == 0:
             print(f"Found no tables. maybe the subject code is wrong. Subject code given {subject_code}")
             again = input("Do you want to try again [y/n]: ")
@@ -62,6 +68,7 @@ def extract_data():
                     exit()
             else:
                 continue
+
         subject = Subject(subject_code)
         for result in results:
             text = result.text.split('\n')
@@ -73,10 +80,12 @@ def extract_data():
                         subject.add_group(string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."),text[0].split()[2])
                     else:
                         subject.add_group(string[-2] + " " + string[-1], string[0], string[2].replace(":", "."), string[4].replace(":", "."),text[0].split()[2])
+
         subjects.append(subject)
         another = input("Do you want to fetch another subject [y/n]: ")
         if another.lower() != "y":
             gather = False
+
     driver.quit()
     print("All done gathering data")
     return subjects

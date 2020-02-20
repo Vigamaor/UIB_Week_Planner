@@ -16,7 +16,6 @@ def delete_subject(subject_code, subjects):
     return subjects
 
 
-
 def get_data():
     with open("plans.json", "r", encoding='utf-8') as file:
         data = json.load(file)
@@ -29,6 +28,15 @@ def get_data():
 
     print(data)
     return subjects
+
+
+def check_groups_schedules(groups):
+    pass
+
+
+def create_schedules():
+    pass
+
 
 '''LEGACY def sort():
     list_of_subjects = []
