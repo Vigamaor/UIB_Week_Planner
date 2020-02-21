@@ -1,5 +1,6 @@
 import json
-from plan_scraper import Subject, Group, write_to_file
+
+from plan_scraper import Subject, write_to_file
 
 
 def delete_subject(subject_code, subjects):
@@ -20,11 +21,12 @@ def get_data():
     with open("plans.json", "r", encoding='utf-8') as file:
         data = json.load(file)
     subjects = []
-    for subject, weeks in data.items():
+    for subject, groups in data.items():
         subjects.append(Subject(subject))
-        for week, groups in weeks.items():
-            for group_name, group_info in groups.items():
-                subjects[-1].add_group(group_name, group_info["day"],group_info["start_time"],group_info["end_time"], week)
+        for group_name, week in groups.items():
+            for week_number, occurenses in week.items():
+                for occurens in occurenses:
+                    subjects[-1].add_group(group_name, occurens["day"], occurens["start_time"], occurens["end_time"], week_number)
 
     print(data)
     return subjects
