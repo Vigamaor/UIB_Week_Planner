@@ -6,5 +6,4 @@ The application is still nowhere done and is intended to have a GUI and differen
 
 
 In the plans.json file the structure of the data goes as follows
-The subject code which contains all the weeks in that semester represented by their number of that week in the calender.
-Each week then contains all the groups and or lectures which will happen that week 
+The subject code which contains all the different groups and lectures. Each group or lecture contains all the different weeks represented by their week number. Each week contains the different events or occurences of that group aka when the group has a session. 
