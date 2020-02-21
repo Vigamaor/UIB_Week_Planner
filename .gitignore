@@ -133,3 +133,4 @@ dmypy.json
 venv
 .idea
 dep/
+plans.json
