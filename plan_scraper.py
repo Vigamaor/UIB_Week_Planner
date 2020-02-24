@@ -33,16 +33,16 @@ class Subject:
 class Group:
     def __init__(self, name):
         self.name = name
-        self.group_occurences = {}
+        self.group_occurrences = {}
         self.lecture = name == "Forelesning"
 
     def __repr__(self):
         return self.name
 
     def add_group_occurence(self, day, start_time, end_time, week_number):
-        if week_number not in self.group_occurences:
-            self.group_occurences[week_number] = []
-        self.group_occurences[week_number].append((GroupOccurrence(day, start_time, end_time)))
+        if week_number not in self.group_occurrences:
+            self.group_occurrences[week_number] = []
+        self.group_occurrences[week_number].append((GroupOccurrence(day, start_time, end_time)))
 
 
 class GroupOccurrence:
@@ -56,7 +56,7 @@ class GroupOccurrence:
 
 
 def extract_data():
-    gather =  True
+    gather = True
     subjects = []
 
     options = Options()
@@ -95,12 +95,16 @@ def extract_data():
 
         subject = Subject(subject_code)
         for result in results:
-            assert result.contents[0].text.split()[0] == "Calendar" , f"Language seems to be wrong expected calendar not {result.contents[0].text.split()[0]}"
+            assert result.contents[0].text.split()[
+                       0] == "Calendar", f"Language seems to be wrong expected calendar not \
+                       {result.contents[0].text.split()[0]}"
             week_number = result.contents[0].text.split()[2]
 
             for line in result.contents:
                 if any(day in line.text for day in ["mon", "tue", "wed", "thu", "fri"]):
-                    subject.add_group(line.contents[2].text, line.contents[0].text.split()[0], line.contents[1].text.split()[0].replace(":", "."),line.contents[1].text.split()[2].replace(":", "."), week_number)
+                    subject.add_group(line.contents[2].text, line.contents[0].text.split()[0],
+                                      line.contents[1].text.split()[0].replace(":", "."),
+                                      line.contents[1].text.split()[2].replace(":", "."), week_number)
 
         subjects.append(subject)
         another = input("Do you want to fetch another subject [y/n]: ")
@@ -127,13 +131,17 @@ def write_to_file(subjects=None, delete=False):
         data[subject.subject_code] = {}
         for group in subject.groups:
             data[subject.subject_code][group.name] = {}
-            for week_number, occurances in group.group_occurences.items():
-                for occurance in occurances:
+            for week_number, occurances in group.group_occurrences.items():
+                for occurrence in occurances:
                     if week_number in data[subject.subject_code][group.name]:
-                        data[subject.subject_code][group.name][week_number].append({"day": occurance.day, "start_time": occurance.start_time, "end_time": occurance.end_time, "lecture": group.lecture})
+                        data[subject.subject_code][group.name][week_number].append(
+                            {"day": occurrence.day, "start_time": occurrence.start_time,
+                             "end_time": occurrence.end_time, "lecture": group.lecture})
                     else:
                         data[subject.subject_code][group.name][week_number] = []
-                        data[subject.subject_code][group.name][week_number].append({"day": occurance.day, "start_time": occurance.start_time, "end_time": occurance.end_time, "lecture": group.lecture})
+                        data[subject.subject_code][group.name][week_number].append(
+                            {"day": occurrence.day, "start_time": occurrence.start_time,
+                             "end_time": occurrence.end_time, "lecture": group.lecture})
 
     with open('plans.json', "w", encoding='utf-8') as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
@@ -141,9 +149,7 @@ def write_to_file(subjects=None, delete=False):
     print(data)
 
 
-
 if __name__ == '__main__':
     # Test data
     subjects = extract_data()
     write_to_file(subjects)
-
