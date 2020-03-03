@@ -1,4 +1,5 @@
 import json
+import itertools
 
 from plan_scraper import Subject, write_to_file
 
@@ -32,12 +33,47 @@ def get_data():
     return subjects
 
 
-def check_groups_schedules(groups):
+def check_groups_schedules(groups, weeks):
     pass
 
 
-def create_schedules():
-    pass
+def find_lectures(subjects):
+    lectures = {}
+    for subject in subjects:
+        for group in subject.groups:
+            if group.lecture:
+                lectures[subject.subject_code] = group
+                break
+
+    return lectures
+
+
+def create_schedules(subjects):
+    # all_group_combination_fit holds all the groups that when placed togheter do not overlapp
+    all_group_combination_fit = []
+    lectures = find_lectures(subjects)
+    # Here we remove the lectures from the group list so that we can combine them without the lectures.
+    # We also add all weeks with a group to a list
+    groups = []
+    # The set is being declared here for visibility
+    weeks = set()
+    for subject in subjects:
+        weeks = weeks.union(subject.weeks)
+        groups.append(subject.groups)
+        for i,group in enumerate(groups[-1]):
+            if group.lecture:
+                groups[-1].pop(i)
+
+    all_group_combinations = list(itertools.product(*groups))
+    print(all_group_combinations)
+    for group_combination in all_group_combinations:
+        if check_groups_schedules(group_combination):
+            all_group_combination_fit.append(group_combination, weeks)
+
+
+
+
+
 
 
 '''LEGACY def sort():
@@ -81,4 +117,6 @@ def create_schedules():
 
 if __name__ == '__main__':
     subjects = get_data()
-    subjects = delete_subject("info132", subjects)
+    #subjects = delete_subject("info132", subjects)
+    #print(find_lectures(subjects))
+    create_schedules(subjects)

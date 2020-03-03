@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-
+# TODO These classes can probably be reworked down two classes removing the subject class and just using a dict.
 class Subject:
     def __init__(self, subject_code):
         self.subject_code = subject_code
@@ -23,7 +23,7 @@ class Subject:
                 break
 
         if not group_exsist:
-            self.groups.append(Group(name))
+            self.groups.append(Group(name, self.subject_code))
             self.groups[-1].add_group_occurence(day, start_time, end_time, week_number)
 
     def __repr__(self):
@@ -31,10 +31,11 @@ class Subject:
 
 
 class Group:
-    def __init__(self, name):
+    def __init__(self, name, subject_code):
         self.name = name
         self.group_occurrences = {}
         self.lecture = name == "Forelesning"
+        self.subject_code = subject_code
 
     def __repr__(self):
         return self.name
