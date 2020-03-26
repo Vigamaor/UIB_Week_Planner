@@ -1,6 +1,6 @@
 import Find_time
 import plan_scraper
-
+from PyQt5.QtWidgets import QApplication, QLabel
 
 def menu():
     pass

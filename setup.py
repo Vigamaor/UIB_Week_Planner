@@ -13,18 +13,6 @@ answer = input("Do you want to continue [y/n]: ")
 if answer.lower() != "y":
     exit()
 
-try:
-    import wget
-except ImportError:
-    subprocess.check_call([executable, "-m", "pip", "install", "wget"])
-    import wget
-try:
-    import selenium
-except ImportError:
-    subprocess.check_call([executable, "-m", "pip", "install", "selenium"])
-
-
-
 while True:
     if "Week_planner.py" not in os.listdir():
         new_dir = input("We cant find the Week_planner python script please provide the folder which Week_planner resides in [please input q to quit]")
@@ -34,6 +22,23 @@ while True:
 
     else:
         break
+
+
+try:
+    import wget
+except ImportError:
+    subprocess.check_call([executable, "-m", "pip", "install", "wget"])
+    import wget
+try:
+    import selenium
+except ImportError:
+    subprocess.check_call([executable, "-m", "pip", "install", "selenium"])
+try:
+    import PyQt5
+except ImportError:
+    subprocess.check_call([executable, "-m", "pip", "install", "PyQt5==5.13.2"])
+    subprocess.check_call([executable, "-m", "pip", "install", "PyQt5-stubs"])
+
 
 if "dep" not in os.listdir():
     os.mkdir("dep")
