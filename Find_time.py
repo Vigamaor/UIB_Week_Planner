@@ -37,10 +37,16 @@ def check_groups_schedules(groups):
     used_weeks = set()
     for group in groups:
         used_weeks = used_weeks.union(group.group_occurrences.keys())
+    # We pick out each week and cheek if there are any chrashes in any of the weeks. If we detect a chrash we
+    # immediately return False
     for week in used_weeks:
         list_occurrences=[]
         for group in groups:
+            # If any of the groups does not contain the week we are currently testing we catch a keyerror and then
+            # continue
             try:
+                # We pick out the occurrences in each group and add them to a list and then check the next occurence
+                # against alle the others allready in the list until all have been checked or a crash has been detected
                 for occurence in group.group_occurrences[week]:
                     if len(list_occurrences) == 0:
                         list_occurrences.append(occurence)
@@ -88,51 +94,6 @@ def create_schedules(subjects):
             all_group_combination_fit.append(group_combination)
 
     print(all_group_combination_fit)
-
-
-
-
-
-
-
-'''LEGACY def sort():
-    list_of_subjects = []
-    for subject in info104:
-        for subject2 in info110:
-            for subject3 in info135:
-                if not (
-                        subject.day == "thu" or subject2.day == "thu" or subject3.day == "thu" or subject.day == "fri" or subject2.day == "fri" or subject3.day == "fri" or subject.day == "mon" or subject2.day == "mon" or subject3.day == "mon"):
-                    if subject.day == "wed" or subject2.day == "wed" or subject3.day == "wed":
-                        for lecture in lectures:
-                            if subject.day == lecture.day or subject2.day == lecture.day or subject3.day == lecture.day:
-                                if (subject.start_time == lecture.start_time or (
-                                        lecture.start_time < subject.end_time and lecture.end_time > subject.start_time)) or (
-                                        lecture.start_time == subject2.start_time or (
-                                        subject2.start_time < lecture.end_time and subject2.end_time > lecture.start_time)) or (
-                                        lecture.start_time == subject3.start_time or (
-                                        subject3.start_time < lecture.end_time and subject3.end_time > lecture.start_time)):
-                                    # TODO her skjærer det seg
-                                    continue
-                        if subject.day == subject2.day:
-                            if subject.start_time == subject2.start_time or (
-                                    subject2.start_time < subject.end_time and subject2.end_time > subject.start_time):
-                                # TODO her skjærer det seg
-                                continue
-                        if subject.day == subject3.day:
-                            if subject.start_time == subject3.start_time or (
-                                    subject3.start_time < subject.end_time and subject3.end_time > subject.start_time):
-                                # TODO her skjærer det seg
-                                continue
-                        if subject2.day == subject3.day:
-                            if subject2.start_time == subject3.start_time or (
-                                    subject3.start_time < subject2.end_time and subject3.end_time > subject2.start_time):
-                                # TODO her skjærer det seg
-                                continue
-                        list_of_subjects.append([subject, subject2, subject3])
-
-    return list_of_subjects
-'''
-
 
 if __name__ == '__main__':
     subjects = get_data()
