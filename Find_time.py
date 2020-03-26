@@ -33,8 +33,25 @@ def get_data():
     return subjects
 
 
-def check_groups_schedules(groups, weeks):
-    pass
+def check_groups_schedules(groups):
+    used_weeks = set()
+    for group in groups:
+        used_weeks = used_weeks.union(group.group_occurrences.keys())
+    for week in used_weeks:
+        list_occurrences=[]
+        for group in groups:
+            try:
+                for occurence in group.group_occurrences[week]:
+                    if len(list_occurrences) == 0:
+                        list_occurrences.append(occurence)
+                    else:
+                        for ls_occurrence in list_occurrences:
+                            if ls_occurrence.day == occurence.day and (ls_occurrence.start_time == occurence.start_time or (ls_occurrence.start_time < occurence.start_time and occurence.start_time < ls_occurrence.end_time) or (occurence.start_time < ls_occurrence.start_time and ls_occurrence.start_time < occurence.end_time)):
+                                return False
+                        list_occurrences.append(occurence)
+            except KeyError:
+                continue
+    return True
 
 
 def find_lectures(subjects):
@@ -68,7 +85,9 @@ def create_schedules(subjects):
     print(all_group_combinations)
     for group_combination in all_group_combinations:
         if check_groups_schedules(group_combination):
-            all_group_combination_fit.append(group_combination, weeks)
+            all_group_combination_fit.append(group_combination)
+
+    print(all_group_combination_fit)
 
 
 
@@ -118,5 +137,6 @@ def create_schedules(subjects):
 if __name__ == '__main__':
     subjects = get_data()
     #subjects = delete_subject("info132", subjects)
+    #subjects = delete_subject("info110", subjects)
     #print(find_lectures(subjects))
     create_schedules(subjects)
