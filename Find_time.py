@@ -33,12 +33,28 @@ def get_data():
     return subjects
 
 
-def check_groups_schedules(groups):
+def check_groups_schedules(groups, lectures):
     used_weeks = set()
     for group in groups:
         used_weeks = used_weeks.union(group.group_occurrences.keys())
     # We pick out each week and cheek if there are any chrashes in any of the weeks. If we detect a chrash we
     # immediately return False
+    for week in used_weeks:
+        for group in groups:
+            for lecture in lectures.values():
+                try:
+                    for occurence in group.group_occurrences[week]:
+                        try:
+                            for lecture_occurence in lecture.group_occurrences[week]:
+                                if lecture_occurence.day == occurence.day and (lecture_occurence.start_time == occurence.start_time or (lecture_occurence.start_time < occurence.start_time and occurence.start_time < lecture_occurence.end_time) or (occurence.start_time < lecture_occurence.start_time and lecture_occurence.start_time < occurence.end_time)):
+                                    return False
+                        except KeyError:
+                            continue
+                except KeyError:
+                    continue
+
+
+
     for week in used_weeks:
         list_occurrences=[]
         for group in groups:
@@ -90,7 +106,7 @@ def create_schedules(subjects):
     all_group_combinations = list(itertools.product(*groups))
     print(all_group_combinations)
     for group_combination in all_group_combinations:
-        if check_groups_schedules(group_combination):
+        if check_groups_schedules(group_combination, lectures):
             all_group_combination_fit.append(group_combination)
 
     print(all_group_combination_fit)
