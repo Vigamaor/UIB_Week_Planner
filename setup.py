@@ -3,7 +3,7 @@ from sys import platform, executable
 import subprocess
 import tarfile
 import zipfile
-
+import time
 
 
 
@@ -38,6 +38,11 @@ try:
 except ImportError:
     subprocess.check_call([executable, "-m", "pip", "install", "PyQt5==5.13.2"])
     subprocess.check_call([executable, "-m", "pip", "install", "PyQt5-stubs"])
+try:
+    import bs4
+except ImportError:
+    subprocess.check_call([executable, "-m", "pip", "install", "beautifulsoup4"])
+
 
 
 if "dep" not in os.listdir():
@@ -49,12 +54,14 @@ if platform == "win32":
         wget.download("https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-win64.zip", "geckodriver-v0.26.0-win64.zip")
         zip_file = zipfile.ZipFile("geckodriver-v0.26.0-win64.zip", mode="r")
         zip_file.extract("geckodriver.exe")
+        time.sleep(3)
         os.remove("geckodriver-v0.26.0-win64.zip")
 elif platform == "linux" or platform == "linux2":
     if "geckodriver" not in os.listdir():
         wget.download("https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz","geckodriver-v0.26.0-linux64.tar.gz")
         file = tarfile.open("geckodriver-v0.26.0-linux64.tar.gz")
         file.extractall()
+        time.sleep(3)
         os.remove("geckodriver-v0.26.0-linux64.tar.gz")
 
 else:
