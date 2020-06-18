@@ -34,10 +34,10 @@ try:
 except ImportError:
     subprocess.check_call([executable, "-m", "pip", "install", "selenium"])
 try:
-    import PyQt5
+    import pyside2
 except ImportError:
-    subprocess.check_call([executable, "-m", "pip", "install", "PyQt5==5.13.2"])
-    subprocess.check_call([executable, "-m", "pip", "install", "PyQt5-stubs"])
+    subprocess.check_call([executable, "-m", "pip", "install", "pyside2"])
+    subprocess.check_call([executable, "-m", "pip", "install", "qdarkstyle"])
 try:
     import bs4
 except ImportError:
