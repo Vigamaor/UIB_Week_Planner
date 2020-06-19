@@ -1,10 +1,11 @@
 import json
 import time
-from sys import platform
 
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+import icalendar
+import requests
+import datetime
+
+
 
 # TODO These classes can probably be reworked down two classes removing the subject class and just using a dict.
 class Subject:
@@ -33,6 +34,7 @@ class Subject:
 class Group:
     def __init__(self, name, subject_code):
         self.name = name
+
         self.group_occurrences = {}
         self.lecture = name == "Forelesning"
         self.subject_code = subject_code
@@ -60,30 +62,14 @@ def extract_data():
     gather = True
     subjects = []
 
-    options = Options()
-    options.add_argument("-headless")
-
-    print("Starting up the Geckodriver. This might take a minute.")
-
-    if platform == "win32":
-        driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
-    elif platform == "linux" or platform == "linux2":
-        driver = webdriver.Firefox(executable_path="dep/geckodriver", options=options)
-    else:
-        assert False, f"Expected platform win32, linux or linux2 not {platform}"
 
     while gather:
         subject_code = input("What subject would you like to fetch: ").upper()
-        url = f"https://tp.uio.no/uib/timeplan/timeplan.php?id={subject_code}&type=course&sem=20v&lang=en"
-
-        driver.get(url)
-        time.sleep(2)
-
-        content = driver.page_source
-        soup = BeautifulSoup(content, "html.parser")
-        results = soup.find_all(class_="cal_table")
-
-        if len(results) == 0:
+        semester = "20h"  # TODO must be fixed to work with multiple semesters.
+        url = f"https://tp.uio.no/uib/timeplan/ical.php?sem={semester}&id%5B0%5D={subject_code}&type=course"
+        try:
+            cal = icalendar.Calendar.from_ical(requests.get(url).text)
+        except ValueError:
             print(f"Found no tables. maybe the subject code is wrong. Subject code given {subject_code}")
             again = input("Do you want to try again [y/n]: ")
             if again != "y":
@@ -95,24 +81,20 @@ def extract_data():
                 continue
 
         subject = Subject(subject_code)
-        for result in results:
-            assert result.contents[0].text.split()[
-                       0] == "Calendar", f"Language seems to be wrong expected calendar not \
-                       {result.contents[0].text.split()[0]}"
-            week_number = result.contents[0].text.split()[2]
+        for result in cal.subcomponents:
+            name = result.get("SUMMARY").replace(subject_code, "").strip("\n").strip(".").strip()
+            day = f"{result.get('dtstart').dt.strftime('%A')}"
+            start_time = float(f"{result.get('dtstart').dt.hour}.{result.get('dtstart').dt.minute}")
+            end_time = float(f"{result.get('dtend').dt.hour}.{result.get('dtend').dt.minute}")
+            week_number = result.get('dtstart').dt.isocalendar()[1]
 
-            for line in result.contents:
-                if any(day in line.text for day in ["mon", "tue", "wed", "thu", "fri"]):
-                    subject.add_group(line.contents[2].text, line.contents[0].text.split()[0],
-                                      line.contents[1].text.split()[0].replace(":", "."),
-                                      line.contents[1].text.split()[2].replace(":", "."), week_number)
+            subject.add_group(name, day, start_time, end_time, week_number)
 
         subjects.append(subject)
         another = input("Do you want to fetch another subject [y/n]: ")
         if another.lower() != "y":
             gather = False
 
-    driver.quit()
     print("All done gathering data")
     return subjects
 
