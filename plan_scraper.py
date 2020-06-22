@@ -3,7 +3,6 @@ import time
 
 import icalendar
 import requests
-import datetime
 
 
 
@@ -114,8 +113,8 @@ def write_to_file(subjects=None, delete=False):
         data[subject.subject_code] = {}
         for group in subject.groups:
             data[subject.subject_code][group.name] = {}
-            for week_number, occurances in group.group_occurrences.items():
-                for occurrence in occurances:
+            for week_number, occurrences in group.group_occurrences.items():
+                for occurrence in occurrences:
                     if week_number in data[subject.subject_code][group.name]:
                         data[subject.subject_code][group.name][week_number].append(
                             {"day": occurrence.day, "start_time": occurrence.start_time,
