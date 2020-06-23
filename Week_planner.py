@@ -1,18 +1,20 @@
 import Find_time
 import plan_scraper
+import datetime
 
 import sys
 import os
 from PySide2.QtCore import Qt, Slot
-from PySide2.QtGui import QPalette, QColor, QIcon
+from PySide2.QtGui import QPalette, QColor, QIcon, QCursor
 from PySide2.QtWidgets import (QAction, QApplication, QHBoxLayout, QLabel, QLineEdit,
                                QMainWindow, QPushButton, QTableWidget, QTableWidgetItem,
                                QWidget, QStyleFactory, QMessageBox, QGridLayout, QComboBox)
 
 
 class SubjectControls(QWidget):
-    def __init__(self):
+    def __init__(self, mainwindow):
         QWidget.__init__(self)
+        self.mainwindow = mainwindow
 
         # Create labels
         self.semester_drop_down_label = QLabel("Choose Semester", self)
@@ -36,7 +38,8 @@ class SubjectControls(QWidget):
         self.delete_subject_drop_down = QComboBox(self)
 
         # Gets the data we will have in the drop down menues
-        self.update_drop_downs()
+        self.update_subject_drop_down()
+        self.set_semester_drop_down()
 
         self.grid = QGridLayout()
 
@@ -58,29 +61,47 @@ class SubjectControls(QWidget):
         except FileNotFoundError:
             pass  # If the file doesn't exist we just move on
 
-        self.update_drop_downs()
+        self.update_subject_drop_down()
 
     @Slot()
     def add_subject(self):
-        pass
-        self.update_drop_downs()
+        self.mainwindow.application.setOverrideCursor(QCursor(Qt.WaitCursor))
+        subject = plan_scraper.extract_data(self.add_subject_field.text(), self.semester_drop_down.currentData())
+        if subject == "error":
+            self.mainwindow.error_message("Could not find the subject please check that you have spelled the id correctly")
+        else:
+            self.mainwindow.subjects.append(subject)
+            self.update_subject_drop_down()
+            self.add_subject_field.clear()
+
+        self.mainwindow.application.restoreOverrideCursor()
 
     def delete_subject(self):
         # TODO Implement are you sure you want to delete
         pass
-        self.update_drop_downs()
+        self.update_subject_drop_down()
 
-    def update_drop_downs(self):
+    def update_subject_drop_down(self):
         # TODO The drop down menues items must be updated to reflect new data.
         # Test data
-        self.semester_drop_down.addItem("Test1")
-        self.delete_subject_drop_down.addItem("Test2")
+        for subject in self.mainwindow.subjects:
+            self.delete_subject_drop_down.addItem(subject.subject_code)
+
+    def set_semester_drop_down(self):
+        # TODO finne en måtte å sette det neste semesteret som default
+        year = datetime.datetime.now().year
+        self.semester_drop_down.addItem(f"{year} Spring", userData=f"{year - 2000}v")
+        self.semester_drop_down.addItem(f"{year} Autumn", userData=f"{year - 2000}h")
+        self.semester_drop_down.addItem(f"{year} Spring", userData=f"{year - 1999}v")
+        self.semester_drop_down.addItem(f"{year} Autumn", userData=f"{year - 1999}h")
+
+
 
 
 class ResultWidget(QWidget):
-    def __init__(self, subjects):
-        self.subjects = subjects
+    def __init__(self, mainwindow):
         QWidget.__init__(self)
+        self.mainwindow = mainwindow
 
         # Create labels
         self.search_bar_label = QLabel("Search Bar", self)
@@ -119,22 +140,14 @@ class ResultWidget(QWidget):
 
     @Slot()
     def create_shecdule(self):
-        if self.subjects is None:
-            self.error_message("No subjects loaded plese add some subjects and try again.")
+        if self.mainwindow.subjects == [] :
+            self.mainwindow.error_message("No subjects loaded plese add some subjects and try again.")
         else:
             schedule = Find_time.create_schedules(self.subjects)
         # TODO must we gather information from multiple sources like a variable and from the Json or do we load from
         #  the Json earlier and get all information from variable
         #  TODO show the information on the screen
 
-    @Slot()
-    def error_message(self, text):
-        msg = QMessageBox()
-        msg.setWindowTitle("Information")
-        msg.setText(text)
-        msg.setIcon(QMessageBox.Information)
-        x = msg.exec_()
-        # TODO show the user a error message telling them to add som subjects.
 
     @Slot()
     def advanced_options(self):
@@ -146,9 +159,10 @@ class ResultWidget(QWidget):
         print(text)
 
 class MainWindow(QMainWindow):
-    def __init__(self, subjects):
+    def __init__(self, subjects, application):
         # Data
         self.subjects = subjects
+        self.application = application
 
         QMainWindow.__init__(self)
         self.setWindowTitle("UIB Week Planner")
@@ -185,8 +199,8 @@ class MainWindow(QMainWindow):
         # We set the layout we will use for our two custom sets of widgets
         self.controlsLayout = QHBoxLayout()
 
-        result_square = ResultWidget(subjects)
-        subject_controls = SubjectControls()
+        result_square = ResultWidget(self)
+        subject_controls = SubjectControls(self)
 
         self.controlsLayout.addWidget(result_square)
         self.controlsLayout.addWidget(subject_controls)
@@ -212,6 +226,13 @@ class MainWindow(QMainWindow):
 
         app.setPalette(darktheme)
 
+    @Slot()
+    def error_message(self, text):
+        msg = QMessageBox()
+        msg.setWindowTitle("Information")
+        msg.setText(text)
+        msg.setIcon(QMessageBox.Information)
+        x = msg.exec_()
 
 def menu():
     pass
@@ -224,7 +245,7 @@ def menu():
 if __name__ == "__main__":
     subjects = Find_time.get_data()
     app = QApplication(sys.argv)
-    window = MainWindow(subjects)
+    window = MainWindow(subjects, app)
     window.resize(800, 600)
     window.show()
     app.exec_()

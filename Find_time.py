@@ -23,7 +23,7 @@ def get_data():
         with open("plans.json", "r", encoding='utf-8') as file:
             data = json.load(file)
     except (FileNotFoundError, json.decoder.JSONDecodeError):
-        return None
+        return []
     subjects = []
     for subject, groups in data.items():
         subjects.append(Subject(subject))
