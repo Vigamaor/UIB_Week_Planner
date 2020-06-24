@@ -77,15 +77,20 @@ class SubjectControls(QWidget):
         self.mainwindow.application.restoreOverrideCursor()
 
     def delete_subject(self):
-        # TODO Implement are you sure you want to delete
-        pass
-        self.update_subject_drop_down()
+        subject = self.delete_subject_drop_down.currentData()
+        box = QMessageBox()
+        box.setText(f"Are you sure you want to delete {subject.subject_code}")
+        box.setIcon(QMessageBox.Question)
+        box.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        button = box.exec_()
+        if button == QMessageBox.Yes:
+            self.mainwindow.subjects.remove(subject)
+            self.update_subject_drop_down()
 
     def update_subject_drop_down(self):
-        # TODO The drop down menues items must be updated to reflect new data.
-        # Test data
+        self.delete_subject_drop_down.clear()
         for subject in self.mainwindow.subjects:
-            self.delete_subject_drop_down.addItem(subject.subject_code)
+            self.delete_subject_drop_down.addItem(subject.subject_code, userData=subject)
 
     def set_semester_drop_down(self):
         # TODO finne en måtte å sette det neste semesteret som default
