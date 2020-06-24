@@ -9,7 +9,7 @@ import requests
 # TODO These classes can probably be reworked down two classes removing the subject class and just using a dict.
 class Subject:
     def __init__(self, subject_code):
-        self.subject_code = subject_code
+        self.subject_code = subject_code.upper()
         self.weeks = set()
         self.groups = []
 
@@ -35,8 +35,8 @@ class Group:
         self.name = name
 
         self.group_occurrences = {}
-        self.lecture = name == "Forelesning"
-        self.subject_code = subject_code
+        self.lecture = "forelesning" in name.lower()
+        self.subject_code = subject_code.upper()
 
     def __repr__(self):
         return self.name
@@ -57,45 +57,26 @@ class GroupOccurrence:
         return self.day
 
 
-def extract_data():
-    gather = True
-    subjects = []
+def extract_data(subject_code, semester):
+    url = f"https://tp.uio.no/uib/timeplan/ical.php?sem={semester}&id%5B0%5D={subject_code.upper()}&type=course"
+    try:
+        cal = icalendar.Calendar.from_ical(requests.get(url).text)
+    except (ValueError, requests.exceptions.ConnectionError):
+        return "error"
 
+    subject = Subject(subject_code)
+    for result in cal.subcomponents:
+        name = result.get("SUMMARY").replace(subject_code.upper(), "").strip("\n").strip(".").strip()
+        day = f"{result.get('dtstart').dt.strftime('%A')}"
+        start_time = float(f"{result.get('dtstart').dt.hour}.{result.get('dtstart').dt.minute}")
+        end_time = float(f"{result.get('dtend').dt.hour}.{result.get('dtend').dt.minute}")
+        week_number = result.get('dtstart').dt.isocalendar()[1]
 
-    while gather:
-        subject_code = input("What subject would you like to fetch: ").upper()
-        semester = "20h"  # TODO must be fixed to work with multiple semesters.
-        url = f"https://tp.uio.no/uib/timeplan/ical.php?sem={semester}&id%5B0%5D={subject_code}&type=course"
-        try:
-            cal = icalendar.Calendar.from_ical(requests.get(url).text)
-        except ValueError:
-            print(f"Found no tables. maybe the subject code is wrong. Subject code given {subject_code}")
-            again = input("Do you want to try again [y/n]: ")
-            if again != "y":
-                if len(subjects) >= 1:
-                    break
-                else:
-                    exit()
-            else:
-                continue
+        subject.add_group(name, day, start_time, end_time, week_number)
 
-        subject = Subject(subject_code)
-        for result in cal.subcomponents:
-            name = result.get("SUMMARY").replace(subject_code, "").strip("\n").strip(".").strip()
-            day = f"{result.get('dtstart').dt.strftime('%A')}"
-            start_time = float(f"{result.get('dtstart').dt.hour}.{result.get('dtstart').dt.minute}")
-            end_time = float(f"{result.get('dtend').dt.hour}.{result.get('dtend').dt.minute}")
-            week_number = result.get('dtstart').dt.isocalendar()[1]
-
-            subject.add_group(name, day, start_time, end_time, week_number)
-
-        subjects.append(subject)
-        another = input("Do you want to fetch another subject [y/n]: ")
-        if another.lower() != "y":
-            gather = False
 
     print("All done gathering data")
-    return subjects
+    return subject
 
 
 def write_to_file(subjects=None, delete=False):
@@ -128,10 +109,8 @@ def write_to_file(subjects=None, delete=False):
     with open('plans.json', "w", encoding='utf-8') as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
 
-    print(data)
-
 
 if __name__ == '__main__':
     # Test data
-    subjects = extract_data()
-    write_to_file(subjects)
+    subjects = extract_data("info180", "20v")
+    #write_to_file(subjects)
