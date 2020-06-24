@@ -101,12 +101,11 @@ def create_schedules(subjects):
     for subject in subjects:
         weeks = weeks.union(subject.weeks)
         groups.append(subject.groups)
-        for i,group in enumerate(groups[-1]):
+        for i, group in enumerate(groups[-1]):
             if group.lecture:
                 groups[-1].pop(i)
 
     all_group_combinations = list(itertools.product(*groups))
-    print(all_group_combinations)
     for group_combination in all_group_combinations:
         if check_groups_schedules(group_combination, lectures):
             all_group_combination_fit.append(group_combination)

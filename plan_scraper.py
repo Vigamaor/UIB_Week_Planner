@@ -35,8 +35,8 @@ class Group:
         self.name = name
 
         self.group_occurrences = {}
-        self.lecture = name == "Forelesning"
-        self.subject_code = subject_code
+        self.lecture = "forelesning" in name.lower()
+        self.subject_code = subject_code.upper()
 
     def __repr__(self):
         return self.name
@@ -66,7 +66,7 @@ def extract_data(subject_code, semester):
 
     subject = Subject(subject_code)
     for result in cal.subcomponents:
-        name = result.get("SUMMARY").replace(subject_code, "").strip("\n").strip(".").strip()
+        name = result.get("SUMMARY").replace(subject_code.upper(), "").strip("\n").strip(".").strip()
         day = f"{result.get('dtstart').dt.strftime('%A')}"
         start_time = float(f"{result.get('dtstart').dt.hour}.{result.get('dtstart').dt.minute}")
         end_time = float(f"{result.get('dtend').dt.hour}.{result.get('dtend').dt.minute}")
@@ -108,8 +108,6 @@ def write_to_file(subjects=None, delete=False):
 
     with open('plans.json', "w", encoding='utf-8') as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
-
-    print(data)
 
 
 if __name__ == '__main__':

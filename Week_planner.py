@@ -23,6 +23,7 @@ class SubjectControls(QWidget):
         self.add_subject_button = QPushButton("Add Subject", self)
         self.delete_subject_button = QPushButton("Delete subject")
         self.clear_json_button = QPushButton("Clear all subjects", self)
+        self.save_to_file_button = QPushButton("Save subjects to file", self)
 
         # Text line field
         self.add_subject_field = QLineEdit(self)
@@ -32,6 +33,7 @@ class SubjectControls(QWidget):
         self.add_subject_field.returnPressed.connect(self.add_subject)
         self.delete_subject_button.clicked.connect(self.delete_subject)
         self.clear_json_button.clicked.connect(self.clear_json_action)
+        self.save_to_file_button.clicked.connect(self.save_subjects_file)
 
         # Drop down menues
         self.semester_drop_down = QComboBox(self)
@@ -46,13 +48,19 @@ class SubjectControls(QWidget):
         # Add widgets to layout
         self.grid.addWidget(self.add_subject_field, 0, 0)
         self.grid.addWidget(self.add_subject_button, 0, 1)
-        self.grid.addWidget(self.semester_drop_down_label, 1, 0)
-        self.grid.addWidget(self.semester_drop_down, 2, 0)
-        self.grid.addWidget(self.delete_subject_button, 3, 1)
-        self.grid.addWidget(self.delete_subject_drop_down, 3, 0)
-        self.grid.addWidget(self.clear_json_button, 4, 0)
+        self.grid.addWidget(self.save_to_file_button, 1, 0)
+        self.grid.addWidget(self.semester_drop_down_label, 2, 0)
+        self.grid.addWidget(self.semester_drop_down, 3, 0)
+        self.grid.addWidget(self.delete_subject_button, 4, 1)
+        self.grid.addWidget(self.delete_subject_drop_down, 4, 0)
+        self.grid.addWidget(self.clear_json_button, 5, 0)
 
         self.setLayout(self.grid)
+
+    @Slot()
+    def save_subjects_file(self):
+        plan_scraper.write_to_file(self.mainwindow.subjects)
+        self.mainwindow.infomation_message("Save successfull")
 
     @Slot()
     def clear_json_action(self):
@@ -68,7 +76,7 @@ class SubjectControls(QWidget):
         self.mainwindow.application.setOverrideCursor(QCursor(Qt.WaitCursor))
         subject = plan_scraper.extract_data(self.add_subject_field.text(), self.semester_drop_down.currentData())
         if subject == "error":
-            self.mainwindow.error_message("Could not find the subject please check that you have spelled the id correctly")
+            self.mainwindow.infomation_message("Could not find the subject please check that you have spelled the id correctly")
         else:
             self.mainwindow.subjects.append(subject)
             self.update_subject_drop_down()
@@ -99,8 +107,6 @@ class SubjectControls(QWidget):
         self.semester_drop_down.addItem(f"{year} Autumn", userData=f"{year - 2000}h")
         self.semester_drop_down.addItem(f"{year} Spring", userData=f"{year - 1999}v")
         self.semester_drop_down.addItem(f"{year} Autumn", userData=f"{year - 1999}h")
-
-
 
 
 class ResultWidget(QWidget):
@@ -145,13 +151,23 @@ class ResultWidget(QWidget):
 
     @Slot()
     def create_shecdule(self):
-        if self.mainwindow.subjects == [] :
-            self.mainwindow.error_message("No subjects loaded plese add some subjects and try again.")
+        if not self.mainwindow.subjects:  # Checks that the subject list is empty
+            self.mainwindow.infomation_message("No subjects loaded plese add some subjects and try again.")
         else:
-            schedule = Find_time.create_schedules(self.subjects)
-        # TODO must we gather information from multiple sources like a variable and from the Json or do we load from
-        #  the Json earlier and get all information from variable
-        #  TODO show the information on the screen
+            schedule = Find_time.create_schedules(self.mainwindow.subjects)
+
+            result_header = []
+            for i, group in enumerate(schedule[0]):
+                self.result_list.insertColumn(i)
+                result_header.append(str(group.subject_code))
+
+            self.result_list.setHorizontalHeaderLabels(result_header)
+            self.result_list.setRowCount(len(schedule))
+
+            for row, groups in enumerate(schedule):
+                for column, group in enumerate(groups):
+                    self.result_list.setItem(row, column, QTableWidgetItem(group.name))
+            # TODO find ways to improve the display
 
 
     @Slot()
@@ -232,7 +248,7 @@ class MainWindow(QMainWindow):
         app.setPalette(darktheme)
 
     @Slot()
-    def error_message(self, text):
+    def infomation_message(self, text):
         msg = QMessageBox()
         msg.setWindowTitle("Information")
         msg.setText(text)
