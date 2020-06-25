@@ -19,8 +19,11 @@ def delete_subject(subject_code, subjects):
 
 
 def get_data():
-    with open("plans.json", "r", encoding='utf-8') as file:
-        data = json.load(file)
+    try:
+        with open("plans.json", "r", encoding='utf-8') as file:
+            data = json.load(file)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        return []
     subjects = []
     for subject, groups in data.items():
         subjects.append(Subject(subject))
@@ -29,7 +32,6 @@ def get_data():
                 for occurens in occurenses:
                     subjects[-1].add_group(group_name, occurens["day"], occurens["start_time"], occurens["end_time"], week_number)
 
-    print(data)
     return subjects
 
 
@@ -99,17 +101,16 @@ def create_schedules(subjects):
     for subject in subjects:
         weeks = weeks.union(subject.weeks)
         groups.append(subject.groups)
-        for i,group in enumerate(groups[-1]):
+        for i, group in enumerate(groups[-1]):
             if group.lecture:
                 groups[-1].pop(i)
 
     all_group_combinations = list(itertools.product(*groups))
-    print(all_group_combinations)
     for group_combination in all_group_combinations:
         if check_groups_schedules(group_combination, lectures):
             all_group_combination_fit.append(group_combination)
 
-    print(all_group_combination_fit)
+    return all_group_combination_fit
 
 if __name__ == '__main__':
     subjects = get_data()

@@ -1,15 +1,15 @@
 import json
 import time
-from sys import platform
 
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+import icalendar
+import requests
+
+
 
 # TODO These classes can probably be reworked down two classes removing the subject class and just using a dict.
 class Subject:
     def __init__(self, subject_code):
-        self.subject_code = subject_code
+        self.subject_code = subject_code.upper()
         self.weeks = set()
         self.groups = []
 
@@ -33,9 +33,10 @@ class Subject:
 class Group:
     def __init__(self, name, subject_code):
         self.name = name
+
         self.group_occurrences = {}
-        self.lecture = name == "Forelesning"
-        self.subject_code = subject_code
+        self.lecture = "forelesning" in name.lower()
+        self.subject_code = subject_code.upper()
 
     def __repr__(self):
         return self.name
@@ -56,65 +57,26 @@ class GroupOccurrence:
         return self.day
 
 
-def extract_data():
-    gather = True
-    subjects = []
+def extract_data(subject_code, semester):
+    url = f"https://tp.uio.no/uib/timeplan/ical.php?sem={semester}&id%5B0%5D={subject_code.upper()}&type=course"
+    try:
+        cal = icalendar.Calendar.from_ical(requests.get(url).text)
+    except (ValueError, requests.exceptions.ConnectionError):
+        return "error"
 
-    options = Options()
-    options.add_argument("-headless")
+    subject = Subject(subject_code)
+    for result in cal.subcomponents:
+        name = result.get("SUMMARY").replace(subject_code.upper(), "").strip("\n").strip(".").strip()
+        day = f"{result.get('dtstart').dt.strftime('%A')}"
+        start_time = float(f"{result.get('dtstart').dt.hour}.{result.get('dtstart').dt.minute}")
+        end_time = float(f"{result.get('dtend').dt.hour}.{result.get('dtend').dt.minute}")
+        week_number = result.get('dtstart').dt.isocalendar()[1]
 
-    print("Starting up the Geckodriver. This might take a minute.")
+        subject.add_group(name, day, start_time, end_time, week_number)
 
-    if platform == "win32":
-        driver = webdriver.Firefox(executable_path="dep/geckodriver.exe", options=options)
-    elif platform == "linux" or platform == "linux2":
-        driver = webdriver.Firefox(executable_path="dep/geckodriver", options=options)
-    else:
-        assert False, f"Expected platform win32, linux or linux2 not {platform}"
 
-    while gather:
-        subject_code = input("What subject would you like to fetch: ").upper()
-        url = f"https://tp.uio.no/uib/timeplan/timeplan.php?id={subject_code}&type=course&sem=20v&lang=en"
-
-        driver.get(url)
-        time.sleep(2)
-
-        content = driver.page_source
-        soup = BeautifulSoup(content, "html.parser")
-        results = soup.find_all(class_="cal_table")
-
-        if len(results) == 0:
-            print(f"Found no tables. maybe the subject code is wrong. Subject code given {subject_code}")
-            again = input("Do you want to try again [y/n]: ")
-            if again != "y":
-                if len(subjects) >= 1:
-                    break
-                else:
-                    exit()
-            else:
-                continue
-
-        subject = Subject(subject_code)
-        for result in results:
-            assert result.contents[0].text.split()[
-                       0] == "Calendar", f"Language seems to be wrong expected calendar not \
-                       {result.contents[0].text.split()[0]}"
-            week_number = result.contents[0].text.split()[2]
-
-            for line in result.contents:
-                if any(day in line.text for day in ["mon", "tue", "wed", "thu", "fri"]):
-                    subject.add_group(line.contents[2].text, line.contents[0].text.split()[0],
-                                      line.contents[1].text.split()[0].replace(":", "."),
-                                      line.contents[1].text.split()[2].replace(":", "."), week_number)
-
-        subjects.append(subject)
-        another = input("Do you want to fetch another subject [y/n]: ")
-        if another.lower() != "y":
-            gather = False
-
-    driver.quit()
     print("All done gathering data")
-    return subjects
+    return subject
 
 
 def write_to_file(subjects=None, delete=False):
@@ -132,8 +94,8 @@ def write_to_file(subjects=None, delete=False):
         data[subject.subject_code] = {}
         for group in subject.groups:
             data[subject.subject_code][group.name] = {}
-            for week_number, occurances in group.group_occurrences.items():
-                for occurrence in occurances:
+            for week_number, occurrences in group.group_occurrences.items():
+                for occurrence in occurrences:
                     if week_number in data[subject.subject_code][group.name]:
                         data[subject.subject_code][group.name][week_number].append(
                             {"day": occurrence.day, "start_time": occurrence.start_time,
@@ -147,10 +109,8 @@ def write_to_file(subjects=None, delete=False):
     with open('plans.json', "w", encoding='utf-8') as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
 
-    print(data)
-
 
 if __name__ == '__main__':
     # Test data
-    subjects = extract_data()
-    write_to_file(subjects)
+    subjects = extract_data("info180", "20v")
+    #write_to_file(subjects)

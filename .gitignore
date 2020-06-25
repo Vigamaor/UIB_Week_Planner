@@ -132,5 +132,6 @@ dmypy.json
 .venvs
 venv
 .idea
-dep/
 plans.json
+UI example.png
+test.py
