@@ -17,6 +17,7 @@ class SubjectControls(QWidget):
         self.mainwindow = mainwindow
 
         # Create labels
+        self.spacer_label = QLabel("", self)
         self.semester_drop_down_label = QLabel("Choose Semester", self)
 
         # Create buttons
@@ -46,14 +47,15 @@ class SubjectControls(QWidget):
         self.grid = QGridLayout()
 
         # Add widgets to layout
-        self.grid.addWidget(self.add_subject_field, 0, 0)
-        self.grid.addWidget(self.add_subject_button, 0, 1)
-        self.grid.addWidget(self.save_to_file_button, 1, 0)
-        self.grid.addWidget(self.semester_drop_down_label, 2, 0)
-        self.grid.addWidget(self.semester_drop_down, 3, 0)
-        self.grid.addWidget(self.delete_subject_button, 4, 1)
-        self.grid.addWidget(self.delete_subject_drop_down, 4, 0)
-        self.grid.addWidget(self.clear_json_button, 5, 0)
+        self.grid.addWidget(self.spacer_label, 0, 0)
+        self.grid.addWidget(self.add_subject_field, 1, 0)
+        self.grid.addWidget(self.add_subject_button, 1, 1)
+        self.grid.addWidget(self.save_to_file_button, 2, 0)
+        self.grid.addWidget(self.semester_drop_down_label, 3, 0)
+        self.grid.addWidget(self.semester_drop_down, 4, 0)
+        self.grid.addWidget(self.delete_subject_button, 5, 1)
+        self.grid.addWidget(self.delete_subject_drop_down, 5, 0)
+        self.grid.addWidget(self.clear_json_button, 6, 0)
 
         self.setLayout(self.grid)
 
@@ -227,13 +229,20 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.controls)
 
         # We set the layout we will use for our two custom sets of widgets
-        self.controlsLayout = QHBoxLayout()
+        self.controlsLayout = QGridLayout()
 
         result_square = ResultWidget(self)
         subject_controls = SubjectControls(self)
 
-        self.controlsLayout.addWidget(result_square)
-        self.controlsLayout.addWidget(subject_controls)
+        self.controlsLayout.setColumnStretch(0, 2)
+        self.controlsLayout.setColumnStretch(1, 0)
+
+
+        self.controlsLayout.addWidget(result_square, 0, 0, 5, 1)
+        self.controlsLayout.addWidget(subject_controls, 0, 1, 1, 1)
+
+
+
         self.controls.setLayout(self.controlsLayout)
 
     @Slot()
