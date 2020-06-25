@@ -60,7 +60,7 @@ class SubjectControls(QWidget):
     @Slot()
     def save_subjects_file(self):
         plan_scraper.write_to_file(self.mainwindow.subjects)
-        self.mainwindow.infomation_message("Save successfull")
+        self.mainwindow.information_message("Save successfull")
 
     @Slot()
     def clear_json_action(self):
@@ -76,7 +76,7 @@ class SubjectControls(QWidget):
         self.mainwindow.application.setOverrideCursor(QCursor(Qt.WaitCursor))
         subject = plan_scraper.extract_data(self.add_subject_field.text(), self.semester_drop_down.currentData())
         if subject == "error":
-            self.mainwindow.infomation_message("Could not find the subject please check that you have spelled the id correctly")
+            self.mainwindow.information_message("Could not find the subject please check that you have spelled the id correctly")
         else:
             self.mainwindow.subjects.append(subject)
             self.update_subject_drop_down()
@@ -125,11 +125,11 @@ class ResultWidget(QWidget):
         # Text line field
         self.search_bar = QLineEdit(self)
 
-        # The resutl window
+        # The result window
         self.result_list = QTableWidget(self)
 
         # connect buttons
-        self.create_schedule_button.clicked.connect(self.create_shecdule)
+        self.create_schedule_button.clicked.connect(self.create_schedule)
         self.advanced_options_button.clicked.connect(self.advanced_options)
         self.search_button.clicked.connect(self.search)
         self.search_bar.returnPressed.connect(self.search)  # returnPressed notices when enter is pressed
@@ -146,14 +146,11 @@ class ResultWidget(QWidget):
 
         self.setLayout(self.grid)
 
-
-
-
     @Slot()
-    def create_shecdule(self):
+    def create_schedule(self):
         self.result_list.clear()
         if not self.mainwindow.subjects:  # Checks that the subject list is empty
-            self.mainwindow.infomation_message("No subjects loaded plese add some subjects and try again.")
+            self.mainwindow.information_message("No subjects loaded plese add some subjects and try again.")
         else:
             schedule = Find_time.create_schedules(self.mainwindow.subjects)
 
@@ -174,7 +171,7 @@ class ResultWidget(QWidget):
 
     @Slot()
     def advanced_options(self):
-        self.mainwindow.infomation_message("Not yet implemented")
+        self.mainwindow.information_message("Not yet implemented")
 
     @Slot()
     def search(self):
@@ -190,6 +187,7 @@ class ResultWidget(QWidget):
                 self.result_list.hideRow(row)
 
     # TODO creare more and advanced ways to search
+
 
 class MainWindow(QMainWindow):
     def __init__(self, subjects, application):
@@ -216,7 +214,6 @@ class MainWindow(QMainWindow):
         exit_action.setShortcut("Ctrl+Q")
         exit_action.triggered.connect(self.exit_app)
 
-
         # Changing the colour theme of the application
         set_dark_theme = QAction("Set Dark Theme", self)
         set_dark_theme.triggered.connect(self.dark_theme)
@@ -238,7 +235,6 @@ class MainWindow(QMainWindow):
         self.controlsLayout.addWidget(result_square)
         self.controlsLayout.addWidget(subject_controls)
         self.controls.setLayout(self.controlsLayout)
-        #self.controlsLayout.
 
     @Slot()
     def exit_app(self):
@@ -260,19 +256,12 @@ class MainWindow(QMainWindow):
         app.setPalette(darktheme)
 
     @Slot()
-    def infomation_message(self, text):
+    def information_message(self, text):
         msg = QMessageBox()
         msg.setWindowTitle("Information")
         msg.setText(text)
         msg.setIcon(QMessageBox.Information)
-        x = msg.exec_()
-
-def menu():
-    pass
-    # TODO System for å hente data
-    # TODO GUI for å vise data
-    # TODO system for å cleare json lagret data.
-
+        msg.exec_()
 
 
 if __name__ == "__main__":
@@ -282,5 +271,3 @@ if __name__ == "__main__":
     window.resize(800, 600)
     window.show()
     sys.exit(app.exec_())
-
-
