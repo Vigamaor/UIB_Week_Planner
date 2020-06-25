@@ -174,7 +174,7 @@ class ResultWidget(QWidget):
 
     @Slot()
     def advanced_options(self):
-        pass
+        self.mainwindow.infomation_message("Not yet implemented")
 
     @Slot()
     def search(self):
@@ -281,6 +281,6 @@ if __name__ == "__main__":
     window = MainWindow(subjects, app)
     window.resize(800, 600)
     window.show()
-    app.exec_()
+    sys.exit(app.exec_())
 
 
