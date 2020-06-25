@@ -1,9 +1,9 @@
 import Find_time
 import plan_scraper
-import datetime
 
 import sys
 import os
+import datetime
 from PySide2.QtCore import Qt, Slot
 from PySide2.QtGui import QPalette, QColor, QIcon, QCursor
 from PySide2.QtWidgets import (QAction, QApplication, QHBoxLayout, QLabel, QLineEdit,
@@ -151,6 +151,7 @@ class ResultWidget(QWidget):
 
     @Slot()
     def create_shecdule(self):
+        self.result_list.clear()
         if not self.mainwindow.subjects:  # Checks that the subject list is empty
             self.mainwindow.infomation_message("No subjects loaded plese add some subjects and try again.")
         else:
@@ -161,6 +162,7 @@ class ResultWidget(QWidget):
                 self.result_list.insertColumn(i)
                 result_header.append(str(group.subject_code))
 
+            self.result_list.setColumnCount(len(result_header))
             self.result_list.setHorizontalHeaderLabels(result_header)
             self.result_list.setRowCount(len(schedule))
 
@@ -176,8 +178,18 @@ class ResultWidget(QWidget):
 
     @Slot()
     def search(self):
+        for row in range(self.result_list.rowCount()):
+            self.result_list.showRow(row)
         text = self.search_bar.text()
-        print(text)
+        items = self.result_list.findItems(text, Qt.MatchContains)
+        row_list = []
+        for item in items:
+            row_list.append(item.row())
+        for row in range(self.result_list.rowCount()):
+            if row not in row_list:
+                self.result_list.hideRow(row)
+
+    # TODO creare more and advanced ways to search
 
 class MainWindow(QMainWindow):
     def __init__(self, subjects, application):
