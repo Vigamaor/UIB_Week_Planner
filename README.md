@@ -8,3 +8,7 @@ suggested by this application always double check them yourself to make sure the
 
 The structure of the plans.json file, which is generated when you save a subject, is as follows.
 The subject code which contains all the different groups and lectures. Each group or lecture contains all the different weeks the group/lecture meets represented by their week number. Each week contains the different events/occurences of that group aka when the group has a session. 
+
+The search function is simple and searches for all partial matches. If you want to search only in one of the column/subjects.
+Search like this: Subjectcode: group
+For example if you are looking for group 6 in INFO135 you search for this like so: INFO135: group 6
