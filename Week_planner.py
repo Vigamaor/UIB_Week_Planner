@@ -157,13 +157,13 @@ class ResultWidget(QWidget):
         else:
             schedule = Find_time.create_schedules(self.mainwindow.subjects)
 
-            result_header = []
+            self.result_header = []
             for i, group in enumerate(schedule[0]):
                 self.result_list.insertColumn(i)
-                result_header.append(str(group.subject_code))
+                self.result_header.append(str(group.subject_code))
 
-            self.result_list.setColumnCount(len(result_header))
-            self.result_list.setHorizontalHeaderLabels(result_header)
+            self.result_list.setColumnCount(len(self.result_header))
+            self.result_list.setHorizontalHeaderLabels(self.result_header)
             self.result_list.setRowCount(len(schedule))
 
             for row, groups in enumerate(schedule):
@@ -178,18 +178,29 @@ class ResultWidget(QWidget):
 
     @Slot()
     def search(self):
+        subject_code = None
         for row in range(self.result_list.rowCount()):
             self.result_list.showRow(row)
         text = self.search_bar.text()
+        if ":" in text:
+            subject_code = text.split(":")[0]
+            text = "".join(text.split(":")[1:])
+        text = text.strip()
         items = self.result_list.findItems(text, Qt.MatchContains)
         row_list = []
-        for item in items:
-            row_list.append(item.row())
+        if subject_code is not None:
+            for i, column in enumerate(self.result_header):
+                if subject_code.lower() == column.lower():
+                    column_index = i
+            for item in items:
+                if item.column() == column_index:
+                    row_list.append(item.row())
+        else:
+            for item in items:
+                row_list.append(item.row())
         for row in range(self.result_list.rowCount()):
             if row not in row_list:
                 self.result_list.hideRow(row)
-
-    # TODO creare more and advanced ways to search
 
 
 class MainWindow(QMainWindow):
