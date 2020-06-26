@@ -4,11 +4,12 @@ import plan_scraper
 import sys
 import os
 import datetime
+import qdarkstyle
 from PySide2.QtCore import Qt, Slot
-from PySide2.QtGui import QPalette, QColor, QIcon, QCursor
-from PySide2.QtWidgets import (QAction, QApplication, QHBoxLayout, QLabel, QLineEdit,
+from PySide2.QtGui import QIcon, QCursor
+from PySide2.QtWidgets import (QAction, QApplication, QLabel, QLineEdit,
                                QMainWindow, QPushButton, QTableWidget, QTableWidgetItem,
-                               QWidget, QStyleFactory, QMessageBox, QGridLayout, QComboBox)
+                               QWidget, QMessageBox, QGridLayout, QComboBox)
 
 
 class SubjectControls(QWidget):
@@ -197,11 +198,14 @@ class MainWindow(QMainWindow):
         self.subjects = subjects
         self.application = application
 
+        # Information about if the application is in dark mode
+        self.dark_mode = False
+
         QMainWindow.__init__(self)
         self.setWindowTitle("UIB Week Planner")
-        self.setGeometry(600, 200, 600, 800)  # The first two sets the location the window spawns
+        self.setGeometry(600, 200, 850, 600)  # The first two sets the location the window spawns
         self.setMinimumHeight(600)
-        self.setMinimumWidth(800)
+        self.setMinimumWidth(850)
 
         # Logo
         icon = QIcon("deps/logo-transparent.png")
@@ -212,17 +216,23 @@ class MainWindow(QMainWindow):
         self.file_menu = self.menu.addMenu("Options")
 
         # Exit QAction
-        exit_action = QAction("Exit", self)
-        exit_action.setShortcut("Ctrl+Q")
-        exit_action.triggered.connect(self.exit_app)
+        self.exit_action = QAction("Exit", self)
+        self.exit_action.setShortcut("Ctrl+Q")
+        self.exit_action.triggered.connect(self.exit_app)
 
         # Changing the colour theme of the application
-        set_dark_theme = QAction("Set Dark Theme", self)
-        set_dark_theme.triggered.connect(self.dark_theme)
+        self.set_dark_theme = QAction("Set Dark Theme", self)
+        self.set_dark_theme.triggered.connect(self.dark_theme)
+
+        #About menu
+        self.about_menu = QAction("About", self)
+        self.about_menu.triggered.connect(self.about)
+
 
         # Adding all the buttons we created above to the menu bar.
-        self.file_menu.addAction(exit_action)
-        self.file_menu.addAction(set_dark_theme)
+        self.file_menu.addAction(self.exit_action)
+        self.file_menu.addAction(self.set_dark_theme)
+        self.file_menu.addAction(self.about_menu)
 
         # Create and set the central widget
         self.controls = QWidget()
@@ -237,13 +247,14 @@ class MainWindow(QMainWindow):
         self.controlsLayout.setColumnStretch(0, 2)
         self.controlsLayout.setColumnStretch(1, 0)
 
-
         self.controlsLayout.addWidget(result_square, 0, 0, 5, 1)
         self.controlsLayout.addWidget(subject_controls, 0, 1, 1, 1)
 
-
-
         self.controls.setLayout(self.controlsLayout)
+
+    @Slot()
+    def about(self):
+        pass
 
     @Slot()
     def exit_app(self):
@@ -251,18 +262,14 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def dark_theme(self):  # TODO make a settings file so you can remember settings
-        # TODO make it so you can switch between colours.
-        app.setStyle(QStyleFactory.create("fusion"))
-        darktheme = QPalette()
-        darktheme.setColor(QPalette.Window, QColor(45, 45, 45))
-        darktheme.setColor(QPalette.WindowText, QColor(222, 222, 222))
-        darktheme.setColor(QPalette.Button, QColor(45, 45, 45))
-        darktheme.setColor(QPalette.ButtonText, QColor(222, 222, 222))
-        darktheme.setColor(QPalette.AlternateBase, QColor(222, 222, 222))
-        darktheme.setColor(QPalette.ToolTipBase, QColor(222, 222, 222))
-        darktheme.setColor(QPalette.Highlight, QColor(45, 45, 45))
-
-        app.setPalette(darktheme)
+        if not self.dark_mode:
+            app.setStyleSheet(qdarkstyle.load_stylesheet())
+            self.set_dark_theme.setText("Set Light Theme")
+            self.dark_mode = True
+        else:
+            app.setStyleSheet("")
+            self.set_dark_theme.setText("Set Dark Theme")
+            self.dark_mode = False
 
     @Slot()
     def information_message(self, text):
@@ -277,6 +284,5 @@ if __name__ == "__main__":
     subjects = Find_time.get_data()
     app = QApplication(sys.argv)
     window = MainWindow(subjects, app)
-    window.resize(800, 600)
     window.show()
     sys.exit(app.exec_())
