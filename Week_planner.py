@@ -72,6 +72,7 @@ class SubjectControls(QWidget):
         except FileNotFoundError:
             pass  # If the file doesn't exist we just move on
 
+        self.mainwindow.subjects = []
         self.update_subject_drop_down()
 
     @Slot()
