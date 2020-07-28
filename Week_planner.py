@@ -109,8 +109,8 @@ class SubjectControls(QWidget):
         year = datetime.datetime.now().year
         self.semester_drop_down.addItem(f"{year} Spring", userData=f"{year - 2000}v")
         self.semester_drop_down.addItem(f"{year} Autumn", userData=f"{year - 2000}h")
-        self.semester_drop_down.addItem(f"{year} Spring", userData=f"{year - 1999}v")
-        self.semester_drop_down.addItem(f"{year} Autumn", userData=f"{year - 1999}h")
+        self.semester_drop_down.addItem(f"{year + 1} Spring", userData=f"{year - 1999}v")
+        self.semester_drop_down.addItem(f"{year + 1} Autumn", userData=f"{year - 1999}h")
 
 
 class ResultWidget(QWidget):
