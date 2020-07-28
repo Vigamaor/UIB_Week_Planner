@@ -105,12 +105,16 @@ class SubjectControls(QWidget):
             self.delete_subject_drop_down.addItem(subject.subject_code, userData=subject)
 
     def set_semester_drop_down(self):
-        # TODO finne en måtte å sette det neste semesteret som default
         year = datetime.datetime.now().year
         self.semester_drop_down.addItem(f"{year} Spring", userData=f"{year - 2000}v")
         self.semester_drop_down.addItem(f"{year} Autumn", userData=f"{year - 2000}h")
         self.semester_drop_down.addItem(f"{year + 1} Spring", userData=f"{year - 1999}v")
         self.semester_drop_down.addItem(f"{year + 1} Autumn", userData=f"{year - 1999}h")
+
+        if datetime.datetime.now().month <= 7:
+            self.semester_drop_down.setCurrentIndex(1)
+        else:
+            self.semester_drop_down.setCurrentIndex(0)
 
 
 class ResultWidget(QWidget):
