@@ -46,6 +46,12 @@ class Group:
             self.group_occurrences[week_number] = []
         self.group_occurrences[week_number].append((GroupOccurrence(day, start_time, end_time)))
 
+    def get_days(self):
+        days = set()
+        for occurence in self.group_occurrences:
+            days.add(occurence.day)
+
+        return days
 
 class GroupOccurrence:
     def __init__(self, day, start_time, end_time):
