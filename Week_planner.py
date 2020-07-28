@@ -4,6 +4,7 @@ import plan_scraper
 import sys
 import os
 import datetime
+import json
 import qdarkstyle
 from PySide2.QtCore import Qt, Slot
 from PySide2.QtGui import QIcon, QCursor
@@ -268,6 +269,31 @@ class MainWindow(QMainWindow):
 
         self.controls.setLayout(self.controlsLayout)
 
+        self.settings = self.load_settings()
+
+    def load_settings(self):
+        # For now the only setting is the dark mode setting.
+        try:
+            with open("settings.json", "r", encoding="UTF-8") as file:
+                try:
+                    settings = json.load(file)
+                except json.decoder.JSONDecodeError:
+                    settings = {"dark_mode": False}
+                if settings["dark_mode"]:
+                    app.setStyleSheet(qdarkstyle.load_stylesheet())
+                    self.set_dark_theme.setText("Set Light Theme")
+                    self.dark_mode = True
+        # The settings file is only created when you start changing the settings.
+        except FileNotFoundError:
+            settings = {"dark_mode": False}
+
+
+        return settings
+
+    def save_settings(self):
+        with open("settings.json", "w+", encoding="UTF-8") as file:
+            json.dump(self.settings, file)
+
     @Slot()
     def about(self):
         pass
@@ -282,10 +308,14 @@ class MainWindow(QMainWindow):
             app.setStyleSheet(qdarkstyle.load_stylesheet())
             self.set_dark_theme.setText("Set Light Theme")
             self.dark_mode = True
+            self.settings["dark_mode"] = True
+            self.save_settings()
         else:
             app.setStyleSheet("")
             self.set_dark_theme.setText("Set Dark Theme")
             self.dark_mode = False
+            self.settings["dark_mode"] = False
+            self.save_settings()
 
     @Slot()
     def information_message(self, text):
