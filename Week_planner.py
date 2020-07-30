@@ -64,7 +64,7 @@ class SubjectControls(QWidget):
     @Slot()
     def save_subjects_file(self):
         plan_scraper.write_to_file(self.mainwindow.subjects)
-        self.mainwindow.information_message("Save successfull")
+        self.mainwindow.information_message("Save successful")
 
     @Slot()
     def clear_json_action(self):
