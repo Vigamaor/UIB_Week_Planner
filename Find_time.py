@@ -23,7 +23,7 @@ def get_data():
         with open("plans.json", "r", encoding='utf-8') as file:
             data = json.load(file)
     except (FileNotFoundError, json.decoder.JSONDecodeError):
-        return None
+        return []
     subjects = []
     for subject, groups in data.items():
         subjects.append(Subject(subject))
@@ -90,7 +90,7 @@ def find_lectures(subjects):
 
 
 def create_schedules(subjects):
-    # all_group_combination_fit holds all the groups that when placed togheter do not overlapp
+    # all_group_combination_fit holds all the groups that when placed together do not overlap
     all_group_combination_fit = []
     lectures = find_lectures(subjects)
     # Here we remove the lectures from the group list so that we can combine them without the lectures.

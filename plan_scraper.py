@@ -1,12 +1,8 @@
 import json
-import time
-
 import icalendar
 import requests
 
 
-
-# TODO These classes can probably be reworked down two classes removing the subject class and just using a dict.
 class Subject:
     def __init__(self, subject_code):
         self.subject_code = subject_code.upper()
@@ -15,14 +11,14 @@ class Subject:
 
     def add_group(self, name, day, start_time, end_time, week_number):
         self.weeks.add(week_number)
-        group_exsist = False
+        group_exists = False
         for group in self.groups:
             if group.name == name:
                 group.add_group_occurence(day, start_time, end_time, week_number)
-                group_exsist = True
+                group_exists = True
                 break
 
-        if not group_exsist:
+        if not group_exists:
             self.groups.append(Group(name, self.subject_code))
             self.groups[-1].add_group_occurence(day, start_time, end_time, week_number)
 
@@ -45,6 +41,13 @@ class Group:
         if week_number not in self.group_occurrences:
             self.group_occurrences[week_number] = []
         self.group_occurrences[week_number].append((GroupOccurrence(day, start_time, end_time)))
+
+    def get_days(self):
+        days = set()
+        for occurence in self.group_occurrences:
+            days.add(occurence.day)
+
+        return days
 
 
 class GroupOccurrence:
@@ -71,8 +74,8 @@ def extract_data(subject_code, semester):
         start_time = float(f"{result.get('dtstart').dt.hour}.{result.get('dtstart').dt.minute}")
         end_time = float(f"{result.get('dtend').dt.hour}.{result.get('dtend').dt.minute}")
         week_number = result.get('dtstart').dt.isocalendar()[1]
-
         subject.add_group(name, day, start_time, end_time, week_number)
+
 
 
     print("All done gathering data")
@@ -113,4 +116,7 @@ def write_to_file(subjects=None, delete=False):
 if __name__ == '__main__':
     # Test data
     subjects = extract_data("info180", "20v")
-    #write_to_file(subjects)
+    # write_to_file(subjects)
+
+
+

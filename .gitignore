@@ -135,3 +135,6 @@ venv
 plans.json
 UI example.png
 test.py
+
+# The settings file is only created when you start changing the settings.
+settings.json
