@@ -74,8 +74,9 @@ def extract_data(subject_code, semester):
         start_time = float(f"{result.get('dtstart').dt.hour}.{result.get('dtstart').dt.minute}")
         end_time = float(f"{result.get('dtend').dt.hour}.{result.get('dtend').dt.minute}")
         week_number = result.get('dtstart').dt.isocalendar()[1]
-
         subject.add_group(name, day, start_time, end_time, week_number)
+
+
 
     print("All done gathering data")
     return subject
@@ -116,3 +117,6 @@ if __name__ == '__main__':
     # Test data
     subjects = extract_data("info180", "20v")
     # write_to_file(subjects)
+
+
+
