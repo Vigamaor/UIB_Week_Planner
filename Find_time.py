@@ -90,7 +90,7 @@ def find_lectures(subjects):
 
 
 def create_schedules(subjects):
-    # all_group_combination_fit holds all the groups that when placed togheter do not overlapp
+    # all_group_combination_fit holds all the groups that when placed together do not overlap
     all_group_combination_fit = []
     lectures = find_lectures(subjects)
     # Here we remove the lectures from the group list so that we can combine them without the lectures.

@@ -10,7 +10,7 @@ from PySide2.QtCore import Qt, Slot
 from PySide2.QtGui import QIcon, QCursor
 from PySide2.QtWidgets import (QAction, QApplication, QLabel, QLineEdit,
                                QMainWindow, QPushButton, QTableWidget, QTableWidgetItem,
-                               QWidget, QMessageBox, QGridLayout, QComboBox)
+                               QWidget, QMessageBox, QGridLayout, QComboBox, QSizePolicy)
 
 
 class SubjectControls(QWidget):
