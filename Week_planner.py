@@ -113,9 +113,9 @@ class SubjectControls(QWidget):
         self.semester_drop_down.addItem(f"{year + 1} Autumn", userData=f"{year - 1999}h")
 
         if datetime.datetime.now().month <= 7:
-            self.semester_drop_down.setCurrentIndex(1)
-        else:
             self.semester_drop_down.setCurrentIndex(0)
+        else:
+            self.semester_drop_down.setCurrentIndex(1)
 
 
 class ResultWidget(QWidget):
